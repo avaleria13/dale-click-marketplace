@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clientes | Dale Click</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/sidebar.css" />
+  <link rel="stylesheet" href="/css/clientes.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-contenedor">
+        <img src="../images/logo_daleclick.png" alt="Logo Dale Click" class="logo" />
+      </div>
+
+      <nav class="menu-lateral">
+        <a href="/emprendedor/tablero" class="menu-item">Tablero</a>
+        <a href="/emprendedor/productos" class="menu-item">Productos</a>
+        <a href="/emprendedor/pedidos" class="menu-item">Pedidos</a>
+        <a href="/emprendedor/perfil-comercial" class="menu-item">Perfil comercial</a>
+        <a href="/emprendedor/clientes" class="menu-item activo">Clientes</a>
+        <a href="/emprendedor/ventas" class="menu-item">Ventas</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="#" class="menu-item">Configuración</a>
+        <a href="#" class="menu-item">Cerrar sesión</a>
+      </div>
+    </aside>
+
+    <main class="contenido-principal">
+      <header class="barra-superior">
+        <button class="boton-menu" id="botonMenu">☰</button>
+        <div class="acciones-superior">
+          <span>🔍</span>
+          <span>🔔</span>
+          <span>👤</span>
+        </div>
+      </header>
+
+      <section class="contenido-vista">
+        <h1>Clientes</h1>
+        <div class="panel-blanco" id="listaClientes"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/clientes.js"></script>
+</body>
+</html>

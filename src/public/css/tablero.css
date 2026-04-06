@@ -1,0 +1,39 @@
+.encabezado {
+  margin-bottom: 30px;
+}
+
+.encabezado h1 {
+  color: #2f5fa7;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.encabezado p {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.tarjetas-resumen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.tarjeta {
+  background-color: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  min-height: 180px;
+}
+
+.tarjeta h2 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.numero {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tablero | Dale Click</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/sidebar.css" />
+  <link rel="stylesheet" href="/css/tablero.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="../images/logo_daleclick.png" alt="Logo Dale Click" class="logo" />
+      </div>
+
+      <nav class="menu-lateral">
+        <a href="/" class="menu-item activo">Tablero</a>
+        <a href="/productos" class="menu-item">Productos</a>
+        <a href="/pedidos" class="menu-item">Pedidos</a>
+        <a href="/perfil-comercial" class="menu-item">Perfil comercial</a>
+        <a href="/clientes" class="menu-item">Clientes</a>
+        <a href="/ventas" class="menu-item">Ventas</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="#" class="menu-item">Configuración</a>
+        <a href="#" class="menu-item cerrar-sesion">Cerrar sesión</a>
+      </div>
+    </aside>
+
+    <main class="contenido">
+      <header class="encabezado">
+        <h1>¡Bienvenida de nuevo, Gabriela!</h1>
+        <p>Resumen del tablero</p>
+      </header>
+
+      <section class="tarjetas-resumen">
+        <article class="tarjeta">
+          <h2>Productos totales</h2>
+          <p class="numero">28</p>
+          <span>Conteo de categorías y tipos de productos</span>
+        </article>
+
+        <article class="tarjeta">
+          <h2>Órdenes crecientes</h2>
+          <p class="numero">55</p>
+          <span>Pedidos recientes del negocio</span>
+        </article>
+
+        <article class="tarjeta">
+          <h2>Estadísticas</h2>
+          <p class="numero">C$ 9225.00</p>
+          <span>Ventas netas</span>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/tablero.js"></script>
+</body>
+</html>
