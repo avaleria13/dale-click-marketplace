@@ -12,5 +12,17 @@
   },
   "dependencies": {
     "ejs": "^5.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avaleria13/dale-click-marketplace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/avaleria13/dale-click-marketplace/issues"
+  },
+  "homepage": "https://github.com/avaleria13/dale-click-marketplace#readme"
 }
