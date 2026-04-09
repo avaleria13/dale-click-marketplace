@@ -10,71 +10,10 @@
 </head>
 <body>
   <div class="layout">
-    <aside class="sidebar">
-      <div class="sidebar-top">
-        <div class="logo-container">
-          <img src="/images/logo_daleclick.png" alt="Logo Dale Click" class="logo" />
-        </div>
-
-        <nav class="menu-lateral">
-          <a href="/" class="menu-item">
-            <img class="icono-menu" src="/images/tablero.png" alt="Tablero" />
-            <span>Tablero</span>
-          </a>
-
-          <a href="/productos" class="menu-item activo">
-            <img class="icono-menu" src="/images/productos.png" alt="Productos" />
-            <span>Productos</span>
-          </a>
-
-          <a href="/pedidos" class="menu-item">
-            <img class="icono-menu" src="/images/pedidos.png" alt="Pedidos" />
-            <span>Pedidos</span>
-          </a>
-
-          <a href="/perfil-comercial" class="menu-item">
-            <img class="icono-menu" src="/images/perfil-comercial.png" alt="Perfil comercial" />
-            <span>Perfil Comercial</span>
-          </a>
-
-          <a href="/clientes" class="menu-item">
-            <img class="icono-menu" src="/images/clientes.png" alt="Clientes" />
-            <span>Clientes</span>
-          </a>
-
-          <a href="/ventas" class="menu-item">
-            <img class="icono-menu" src="/images/ventas.png" alt="Ventas" />
-            <span>Ventas</span>
-          </a>
-        </nav>
-      </div>
-
-      <div class="sidebar-footer">
-        <a href="#" class="menu-item">
-          <img class="icono-menu" src="/images/configuracion.png" alt="Configuración" />
-          <span>Configuración</span>
-        </a>
-
-        <a href="#" class="menu-item cerrar-sesion">
-          <img class="icono-menu" src="/images/cerrar-sesion.png" alt="Cerrar sesión" />
-          <span>Cerrar sesión</span>
-        </a>
-      </div>
-    </aside>
+    <%- include('../partials/sidebar', { activePage: 'productos' }) %>
 
     <main class="contenido">
-      <header class="barra-superior">
-        <div class="barra-izquierda">
-          <button class="boton-menu" type="button" aria-label="Abrir menú">☰</button>
-        </div>
-
-        <div class="barra-derecha">
-          <button class="icono-superior" type="button" aria-label="Buscar"> <img src="/images/buscar.png" alt="Buscar"> </button>
-          <button class="icono-superior" type="button" aria-label="Aplicaciones"> <img src="/images/apps.png" alt="Aplicaciones"> </button>
-          <button class="icono-superior" type="button" aria-label="Notificaciones"> <img src="/images/notificaciones.png" alt="Notificaciones"></button>
-          <img src="/images/perfil-usuario.png" alt="Perfil de usuario" class="avatar-usuario" />
-        </div>
-      </header>
+      <%- include('../partials/topbar') %>
 
       <section class="seccion-productos">
         <div class="barra-filtros">
@@ -84,9 +23,7 @@
               id="busquedaProducto"
               placeholder="Buscar producto..."
             />
-            <button type="button" class="boton-busqueda" aria-label="Buscar producto">
-              <img src="/images/buscar.png" alt="Buscar" />
-            </button>
+            <button type="button" class="boton-busqueda" aria-label="Buscar producto">🔍</button>
           </div>
 
           <select id="filtroCategoria" class="select-filtro">
