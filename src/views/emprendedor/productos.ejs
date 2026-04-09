@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productos | Dale Click</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/sidebar.css" />
+  <link rel="stylesheet" href="/css/productos.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="logo-container">
+          <img src="/images/logo_daleclick.png" alt="Logo Dale Click" class="logo" />
+        </div>
+
+        <nav class="menu-lateral">
+          <a href="/" class="menu-item">
+            <img class="icono-menu" src="/images/tablero.png" alt="Tablero" />
+            <span>Tablero</span>
+          </a>
+
+          <a href="/productos" class="menu-item activo">
+            <img class="icono-menu" src="/images/productos.png" alt="Productos" />
+            <span>Productos</span>
+          </a>
+
+          <a href="/pedidos" class="menu-item">
+            <img class="icono-menu" src="/images/pedidos.png" alt="Pedidos" />
+            <span>Pedidos</span>
+          </a>
+
+          <a href="/perfil-comercial" class="menu-item">
+            <img class="icono-menu" src="/images/perfil-comercial.png" alt="Perfil comercial" />
+            <span>Perfil Comercial</span>
+          </a>
+
+          <a href="/clientes" class="menu-item">
+            <img class="icono-menu" src="/images/clientes.png" alt="Clientes" />
+            <span>Clientes</span>
+          </a>
+
+          <a href="/ventas" class="menu-item">
+            <img class="icono-menu" src="/images/ventas.png" alt="Ventas" />
+            <span>Ventas</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="#" class="menu-item">
+          <img class="icono-menu" src="/images/configuracion.png" alt="Configuración" />
+          <span>Configuración</span>
+        </a>
+
+        <a href="#" class="menu-item cerrar-sesion">
+          <img class="icono-menu" src="/images/cerrar-sesion.png" alt="Cerrar sesión" />
+          <span>Cerrar sesión</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="contenido">
+      <header class="barra-superior">
+        <div class="barra-izquierda">
+          <button class="boton-menu" type="button" aria-label="Abrir menú">☰</button>
+        </div>
+
+        <div class="barra-derecha">
+          <button class="icono-superior" type="button" aria-label="Buscar"> <img src="/images/buscar.png" alt="Buscar"> </button>
+          <button class="icono-superior" type="button" aria-label="Aplicaciones"> <img src="/images/apps.png" alt="Aplicaciones"> </button>
+          <button class="icono-superior" type="button" aria-label="Notificaciones"> <img src="/images/notificaciones.png" alt="Notificaciones"></button>
+          <img src="/images/perfil-usuario.png" alt="Perfil de usuario" class="avatar-usuario" />
+        </div>
+      </header>
+
+      <section class="seccion-productos">
+        <div class="barra-filtros">
+          <div class="campo-busqueda">
+            <input
+              type="text"
+              id="busquedaProducto"
+              placeholder="Buscar producto..."
+            />
+            <button type="button" class="boton-busqueda" aria-label="Buscar producto">
+              <img src="/images/buscar.png" alt="Buscar" />
+            </button>
+          </div>
+
+          <select id="filtroCategoria" class="select-filtro">
+            <option value="">Categoría</option>
+            <option value="Electrónica">Electrónica</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Ropa">Ropa</option>
+            <option value="Drones">Drones</option>
+          </select>
+
+          <select id="filtroEstado" class="select-filtro">
+            <option value="">Estado</option>
+            <option value="Disponible">Disponible</option>
+            <option value="Sin Stock">Sin Stock</option>
+          </select>
+        </div>
+
+        <div class="barra-botones">
+          <button type="button" class="boton-accion boton-verde">
+            + Añadir Producto
+          </button>
+
+          <button type="button" class="boton-accion boton-azul">
+            ⬆ Cargar CSV Inventario
+          </button>
+        </div>
+
+        <div class="contenedor-tabla">
+          <table class="tabla-productos">
+            <thead>
+              <tr>
+                <th>Imagen</th>
+                <th>Nombre del Producto</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody id="tablaProductosBody">
+              <tr>
+                <td>
+                  <img src="/images/producto-audifonos.png" alt="Auriculares BT Pro" class="miniatura-producto" />
+                </td>
+                <td>
+                  <div class="info-producto">
+                    <a href="#" class="nombre-producto">Auriculares BT Pro</a>
+                    <p>Cancelación activa de ruido</p>
+                  </div>
+                </td>
+                <td>
+                  <div class="categoria-editable">
+                    <select class="select-categoria-fila">
+                      <option selected>Electrónica</option>
+                      <option>Alimentos</option>
+                      <option>Ropa</option>
+                      <option>Drones</option>
+                    </select>
+                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
+                  </div>
+                </td>
+                <td class="precio-producto">C$199.99</td>
+                <td>150</td>
+                <td><span class="estado disponible">Disponible</span></td>
+                <td>
+                  <div class="acciones-fila">
+                    <button type="button" class="accion editar" title="Editar">✎</button>
+                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
+                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <img src="/images/producto-cafe.png" alt="Café de Especialidad Andino" class="miniatura-producto" />
+                </td>
+                <td>
+                  <div class="info-producto">
+                    <a href="#" class="nombre-producto">Café de Especialidad Andino</a>
+                    <p>Origen único, tostado medio</p>
+                  </div>
+                </td>
+                <td>
+                  <div class="categoria-editable">
+                    <select class="select-categoria-fila">
+                      <option>Electrónica</option>
+                      <option selected>Alimentos</option>
+                      <option>Ropa</option>
+                      <option>Drones</option>
+                    </select>
+                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
+                  </div>
+                </td>
+                <td class="precio-producto">C$45.00</td>
+                <td>50</td>
+                <td><span class="estado disponible">Disponible</span></td>
+                <td>
+                  <div class="acciones-fila">
+                    <button type="button" class="accion editar" title="Editar">✎</button>
+                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
+                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <img src="/images/producto-camisa.png" alt="Camiseta Algodón Premium" class="miniatura-producto" />
+                </td>
+                <td>
+                  <div class="info-producto">
+                    <a href="#" class="nombre-producto">Camiseta Algodón Premium</a>
+                    <p>Suave y duradera</p>
+                  </div>
+                </td>
+                <td>
+                  <div class="categoria-editable">
+                    <select class="select-categoria-fila">
+                      <option>Electrónica</option>
+                      <option>Alimentos</option>
+                      <option selected>Ropa</option>
+                      <option>Drones</option>
+                    </select>
+                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
+                  </div>
+                </td>
+                <td class="precio-producto">C$25.00</td>
+                <td>1000</td>
+                <td><span class="estado disponible">Disponible</span></td>
+                <td>
+                  <div class="acciones-fila">
+                    <button type="button" class="accion editar" title="Editar">✎</button>
+                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
+                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <img src="/images/producto-dron.png" alt="Dron FlyPro v4K" class="miniatura-producto" />
+                </td>
+                <td>
+                  <div class="info-producto">
+                    <a href="#" class="nombre-producto">Dron FlyPro v4K</a>
+                    <p>Cámara 4K, 30min vuelo</p>
+                  </div>
+                </td>
+                <td>
+                  <div class="categoria-editable">
+                    <select class="select-categoria-fila">
+                      <option>Electrónica</option>
+                      <option>Alimentos</option>
+                      <option>Ropa</option>
+                      <option selected>Drones</option>
+                    </select>
+                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
+                  </div>
+                </td>
+                <td class="precio-producto">C$599.00</td>
+                <td>20</td>
+                <td><span class="estado sin-stock">Sin Stock</span></td>
+                <td>
+                  <div class="acciones-fila">
+                    <button type="button" class="accion editar" title="Editar">✎</button>
+                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
+                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pie-tabla">
+          <p>Mostrando 4 de 125 entradas</p>
+
+          <div class="paginacion">
+            <button type="button">Anterior</button>
+            <button type="button">1</button>
+            <button type="button">2</button>
+            <button type="button" class="pagina-activa">3</button>
+            <button type="button">4</button>
+            <button type="button">5</button>
+            <button type="button">Siguiente</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/productos.js"></script>
+</body>
+</html>
