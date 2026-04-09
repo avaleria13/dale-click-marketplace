@@ -5,44 +5,189 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pedidos | Dale Click</title>
   <link rel="stylesheet" href="/css/global.css" />
-  <link rel="stylesheet" href="/css/sidebar.css" />
+  <link rel="stylesheet" href="/css/partials/sidebar.css" />
+  <link rel="stylesheet" href="/css/partials/topbar.css" />
   <link rel="stylesheet" href="/css/pedidos.css" />
 </head>
 <body>
   <div class="layout">
-    <aside class="sidebar">
-      <div class="logo-contenedor">
-        <img src="../images/logo_daleclick.png" alt="Logo Dale Click" class="logo" />
-      </div>
+    <%- include('../partials/sidebar', { activePage: 'pedidos' }) %>
 
-      <nav class="menu-lateral">
-        <a href="/emprendedor/tablero" class="menu-item">Tablero</a>
-        <a href="/emprendedor/productos" class="menu-item">Productos</a>
-        <a href="/emprendedor/pedidos" class="menu-item activo">Pedidos</a>
-        <a href="/emprendedor/perfil-comercial" class="menu-item">Perfil comercial</a>
-        <a href="/emprendedor/clientes" class="menu-item">Clientes</a>
-        <a href="/emprendedor/ventas" class="menu-item">Ventas</a>
-      </nav>
+    <main class="contenido">
+      <%- include('../partials/topbar') %>
 
-      <div class="sidebar-footer">
-        <a href="#" class="menu-item">Configuración</a>
-        <a href="#" class="menu-item">Cerrar sesión</a>
-      </div>
-    </aside>
+      <section class="seccion-pedidos">
+        <div class="barra-filtros-pedidos">
+          <div class="campo-busqueda-pedido">
+            <input
+              type="text"
+              id="busquedaPedido"
+              placeholder="Buscar pedido por ID..."
+            />
+            <button type="button" class="boton-busqueda-pedido" aria-label="Buscar pedido">
+              <img src="/images/buscar.png" alt="Buscar" />
+            </button>
+          </div>
 
-    <main class="contenido-principal">
-      <header class="barra-superior">
-        <button class="boton-menu" id="botonMenu">☰</button>
-        <div class="acciones-superior">
-          <span>🔍</span>
-          <span>🔔</span>
-          <span>👤</span>
+          <select id="filtroProductoPedido" class="select-filtro-pedido">
+            <option value="">Productos</option>
+            <option value="Products Picker">Products Picker</option>
+            <option value="Consented Eealage">Consented Eealage</option>
+            <option value="Voute Breelo">Voute Breelo</option>
+            <option value="Products">Products</option>
+            <option value="Laie Poduct">Laie Poduct</option>
+            <option value="Etaninno de Banas">Etaninno de Banas</option>
+          </select>
+
+          <select id="filtroEstadoPedido" class="select-filtro-pedido">
+            <option value="">Estado</option>
+            <option value="Reservado">Reservado</option>
+            <option value="Entregado">Entregado</option>
+          </select>
         </div>
-      </header>
 
-      <section class="contenido-vista">
-        <h1>Pedidos</h1>
-        <div class="panel-blanco" id="listaPedidos"></div>
+        <div class="contenedor-tabla-pedidos">
+          <table class="tabla-pedidos">
+            <thead>
+              <tr>
+                <th>ID Pedido</th>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+
+            <tbody id="tablaPedidosBody">
+              <tr>
+                <td class="id-pedido">101</td>
+                <td>2024-05-15</td>
+                <td class="nombre-producto-pedido">Products Picker</td>
+                <td>1</td>
+                <td>$ 25.00</td>
+                <td>Maia</td>
+                <td>Ausan</td>
+                <td>banilen@gmail.com</td>
+                <td>0373112349</td>
+                <td>
+                  <span class="badge-estado reservado">Reservado</span>
+                </td>
+                <td>
+                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="id-pedido">102</td>
+                <td>2024-05-15</td>
+                <td class="nombre-producto-pedido">Consented Eealage</td>
+                <td>2</td>
+                <td>$ 16.00</td>
+                <td>Seriph</td>
+                <td>Martin</td>
+                <td>rarat@gmail.com</td>
+                <td>0373411672</td>
+                <td>
+                  <span class="badge-estado entregado">Entregado</span>
+                </td>
+                <td>
+                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="id-pedido">103</td>
+                <td>2024-05-15</td>
+                <td class="nombre-producto-pedido">Voute Breelo</td>
+                <td>2</td>
+                <td>$ 23.00</td>
+                <td>Julion</td>
+                <td>Gredia</td>
+                <td>rarat@gmail.com</td>
+                <td>0370719123</td>
+                <td>
+                  <span class="badge-estado reservado">Reservado</span>
+                </td>
+                <td>
+                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="id-pedido">104</td>
+                <td>2024-05-15</td>
+                <td class="nombre-producto-pedido">Products</td>
+                <td>1</td>
+                <td>$ 45.00</td>
+                <td>Maya</td>
+                <td>Maritine</td>
+                <td>carlricn@gmail.com</td>
+                <td>0373165643</td>
+                <td>
+                  <span class="badge-estado entregado">Entregado</span>
+                </td>
+                <td>
+                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="id-pedido">105</td>
+                <td>2024-05-15</td>
+                <td class="nombre-producto-pedido">Laie Poduct</td>
+                <td>2</td>
+                <td>$ 15.00</td>
+                <td>Martia</td>
+                <td>Brandio</td>
+                <td>mukn@gmail.com</td>
+                <td>0373116701</td>
+                <td>
+                  <span class="badge-estado entregado">Entregado</span>
+                </td>
+                <td>
+                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="id-pedido">106</td>
+                <td>2024-05-15</td>
+                <td class="nombre-producto-pedido">Etaninno de Banas</td>
+                <td>1</td>
+                <td>$ 10.00</td>
+                <td>Aldisin</td>
+                <td>Cammos</td>
+                <td>anilcy@gmail.com</td>
+                <td>0373116302</td>
+                <td>
+                  <span class="badge-estado reservado">Reservado</span> 
+                </td>
+                <td>
+                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pie-tabla-pedidos">
+          <p>Mostrando 4 de 125 entradas</p>
+
+          <div class="paginacion-pedidos">
+            <button type="button">Anterior</button>
+            <button type="button">1</button>
+            <button type="button">2</button>
+            <button type="button" class="pagina-activa">3</button>
+            <button type="button">4</button>
+            <button type="button">5</button>
+            <button type="button">Siguiente</button>
+          </div>
+        </div>
       </section>
     </main>
   </div>
