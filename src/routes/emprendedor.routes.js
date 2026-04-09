@@ -3,29 +3,28 @@ const path = require('path');
 
 const router = express.Router();
 
-// Estas rutas por ahora solo sirven HTML estático
 router.get('/tablero', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'tablero.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'tablero.ejs'));
 });
 
 router.get('/productos', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'productos.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'productos.ejs'));
 });
 
 router.get('/pedidos', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'pedidos.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'pedidos.ejs'));
 });
 
 router.get('/perfil-comercial', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'perfil-comercial.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'perfil-comercial.ejs'));
 });
 
 router.get('/clientes', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'clientes.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'clientes.ejs'));
 });
 
 router.get('/ventas', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'ventas.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'ventas.ejs'));
 });
 
 module.exports = router;
