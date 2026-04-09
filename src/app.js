@@ -4,37 +4,35 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Middleware para leer formularios y JSON
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ruta principal
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'emprendedor', 'tablero.html'));
+  res.render('emprendedor/tablero', { activePage: 'tablero' });
 });
 
-// Rutas del portal emprendedor
 app.get('/productos', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'emprendedor', 'productos.html'));
+  res.render('emprendedor/productos', { activePage: 'productos' });
 });
 
 app.get('/pedidos', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'emprendedor', 'pedidos.html'));
+  res.render('emprendedor/pedidos', { activePage: 'pedidos' });
 });
 
 app.get('/perfil-comercial', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'emprendedor', 'perfil-comercial.html'));
+  res.render('emprendedor/perfil-comercial', { activePage: 'perfil' });
 });
 
 app.get('/clientes', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'emprendedor', 'clientes.html'));
+  res.render('emprendedor/clientes', { activePage: 'clientes' });
 });
 
 app.get('/ventas', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'emprendedor', 'ventas.html'));
+  res.render('emprendedor/ventas', { activePage: 'ventas' });
 });
 
 app.listen(PORT, () => {
