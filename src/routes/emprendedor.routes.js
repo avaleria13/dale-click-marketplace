@@ -23,8 +23,4 @@ router.get('/clientes', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'clientes.ejs'));
 });
 
-router.get('/ventas', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'emprendedor', 'ventas.ejs'));
-});
-
 module.exports = router;
