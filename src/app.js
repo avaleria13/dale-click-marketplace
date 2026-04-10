@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+
+const productosRoutes = require('./routes/productos');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -12,11 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.render('emprendedor/tablero', { activePage: 'tablero' });
-});
-
-app.get('/productos', (req, res) => {
-  res.render('emprendedor/productos', { activePage: 'productos' });
+  res.redirect('/productos');
 });
 
 app.get('/pedidos', (req, res) => {
@@ -35,6 +32,6 @@ app.get('/configuracion', (req, res) => {
   res.render('emprendedor/configuracion', { activePage: 'configuracion' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+app.use('/productos', productosRoutes);
+
+module.exports = app;

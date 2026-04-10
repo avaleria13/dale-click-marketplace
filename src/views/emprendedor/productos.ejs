@@ -16,7 +16,10 @@
     <main class="contenido">
       <%- include('../partials/topbar') %>
 
-      <section class="seccion-productos">
+      <section
+        class="seccion-productos"
+        data-estados='<%- JSON.stringify(estados || []) %>'
+      >
         <div class="barra-filtros">
           <div class="campo-busqueda">
             <input
@@ -29,26 +32,28 @@
 
           <select id="filtroCategoria" class="select-filtro">
             <option value="">Categoría</option>
-            <option value="Electrónica">Electrónica</option>
-            <option value="Alimentos">Alimentos</option>
-            <option value="Ropa">Ropa</option>
-            <option value="Drones">Drones</option>
+            <% (categorias || []).forEach((categoria) => { %>
+              <option value="<%= categoria.categoryName %>">
+                <%= categoria.categoryName %>
+              </option>
+            <% }) %>
           </select>
 
           <select id="filtroEstado" class="select-filtro">
             <option value="">Estado</option>
-            <option value="Disponible">Disponible</option>
-            <option value="Sin Stock">Sin Stock</option>
+            <% (estados || []).forEach((estado) => { %>
+              <option value="<%= estado %>"><%= estado %></option>
+            <% }) %>
           </select>
         </div>
 
         <div class="barra-botones">
-          <button type="button" class="boton-accion boton-verde">
+          <button
+            type="button"
+            class="boton-accion boton-verde"
+            id="btnAbrirModalCrear"
+          >
             + Añadir Producto
-          </button>
-
-          <button type="button" class="boton-accion boton-azul">
-            ⬆ Cargar CSV Inventario
           </button>
         </div>
 
@@ -67,156 +72,283 @@
             </thead>
 
             <tbody id="tablaProductosBody">
-              <tr>
-                <td>
-                  <img src="/images/producto-audifonos.png" alt="Auriculares BT Pro" class="miniatura-producto" />
-                </td>
-                <td>
-                  <div class="info-producto">
-                    <a href="#" class="nombre-producto">Auriculares BT Pro</a>
-                    <p>Cancelación activa de ruido</p>
-                  </div>
-                </td>
-                <td>
-                  <div class="categoria-editable">
-                    <select class="select-categoria-fila">
-                      <option selected>Electrónica</option>
-                      <option>Alimentos</option>
-                      <option>Ropa</option>
-                      <option>Drones</option>
-                    </select>
-                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
-                  </div>
-                </td>
-                <td class="precio-producto">C$199.99</td>
-                <td>150</td>
-                <td><span class="estado disponible">Disponible</span></td>
-                <td>
-                  <div class="acciones-fila">
-                    <button type="button" class="accion editar" title="Editar">✎</button>
-                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
-                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
-                  </div>
-                </td>
-              </tr>
+              <% if (productos && productos.length > 0) { %>
+                <% productos.forEach((producto) => { %>
+                  <tr
+                    data-product-id="<%= producto.productID %>"
+                    data-business-id="<%= producto.businessID %>"
+                    data-category-id="<%= producto.categoryID %>"
+                    data-product-name="<%= producto.productName %>"
+                    data-description="<%= producto.description || '' %>"
+                    data-price="<%= producto.price %>"
+                    data-stock="<%= producto.stock %>"
+                    data-status="<%= producto.availabilityStatus %>"
+                    data-image-url="<%= producto.imageURL || '' %>"
+                  >
+                    <td>
+                      <img
+                        src="<%= producto.imageURL || '/images/imagen.png' %>"
+                        alt="<%= producto.productName %>"
+                        class="miniatura-producto"
+                        onerror="this.src='/images/imagen.png'"
+                      />
+                    </td>
 
-              <tr>
-                <td>
-                  <img src="/images/producto-cafe.png" alt="Café de Especialidad Andino" class="miniatura-producto" />
-                </td>
-                <td>
-                  <div class="info-producto">
-                    <a href="#" class="nombre-producto">Café de Especialidad Andino</a>
-                    <p>Origen único, tostado medio</p>
-                  </div>
-                </td>
-                <td>
-                  <div class="categoria-editable">
-                    <select class="select-categoria-fila">
-                      <option>Electrónica</option>
-                      <option selected>Alimentos</option>
-                      <option>Ropa</option>
-                      <option>Drones</option>
-                    </select>
-                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
-                  </div>
-                </td>
-                <td class="precio-producto">C$45.00</td>
-                <td>50</td>
-                <td><span class="estado disponible">Disponible</span></td>
-                <td>
-                  <div class="acciones-fila">
-                    <button type="button" class="accion editar" title="Editar">✎</button>
-                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
-                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
-                  </div>
-                </td>
-              </tr>
+                    <td>
+                      <div class="info-producto">
+                        <a href="#" class="nombre-producto"><%= producto.productName %></a>
+                        <p><%= producto.description || 'Sin descripción' %></p>
+                      </div>
+                    </td>
 
-              <tr>
-                <td>
-                  <img src="/images/producto-camisa.png" alt="Camiseta Algodón Premium" class="miniatura-producto" />
-                </td>
-                <td>
-                  <div class="info-producto">
-                    <a href="#" class="nombre-producto">Camiseta Algodón Premium</a>
-                    <p>Suave y duradera</p>
-                  </div>
-                </td>
-                <td>
-                  <div class="categoria-editable">
-                    <select class="select-categoria-fila">
-                      <option>Electrónica</option>
-                      <option>Alimentos</option>
-                      <option selected>Ropa</option>
-                      <option>Drones</option>
-                    </select>
-                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
-                  </div>
-                </td>
-                <td class="precio-producto">C$25.00</td>
-                <td>1000</td>
-                <td><span class="estado disponible">Disponible</span></td>
-                <td>
-                  <div class="acciones-fila">
-                    <button type="button" class="accion editar" title="Editar">✎</button>
-                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
-                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
-                  </div>
-                </td>
-              </tr>
+                    <td>
+                      <div class="categoria-editable">
+                        <select class="select-categoria-fila" disabled>
+                          <% (categorias || []).forEach((categoria) => { %>
+                            <option
+                              value="<%= categoria.categoryID %>"
+                              <%= Number(producto.categoryID) === Number(categoria.categoryID) ? 'selected' : '' %>
+                            >
+                              <%= categoria.categoryName %>
+                            </option>
+                          <% }) %>
+                        </select>
+                        <button
+                          type="button"
+                          class="boton-editar-categoria"
+                          aria-label="Editar categoría"
+                        >
+                          ✎
+                        </button>
+                      </div>
+                    </td>
 
-              <tr>
-                <td>
-                  <img src="/images/producto-dron.png" alt="Dron FlyPro v4K" class="miniatura-producto" />
-                </td>
-                <td>
-                  <div class="info-producto">
-                    <a href="#" class="nombre-producto">Dron FlyPro v4K</a>
-                    <p>Cámara 4K, 30min vuelo</p>
-                  </div>
-                </td>
-                <td>
-                  <div class="categoria-editable">
-                    <select class="select-categoria-fila">
-                      <option>Electrónica</option>
-                      <option>Alimentos</option>
-                      <option>Ropa</option>
-                      <option selected>Drones</option>
-                    </select>
-                    <button type="button" class="boton-editar-categoria" aria-label="Editar categoría">✎</button>
-                  </div>
-                </td>
-                <td class="precio-producto">C$599.00</td>
-                <td>20</td>
-                <td><span class="estado sin-stock">Sin Stock</span></td>
-                <td>
-                  <div class="acciones-fila">
-                    <button type="button" class="accion editar" title="Editar">✎</button>
-                    <button type="button" class="accion eliminar" title="Eliminar">🗑</button>
-                    <button type="button" class="accion imagen" title="Cambiar imagen">🖼</button>
-                  </div>
-                </td>
-              </tr>
+                    <td class="precio-producto">C$<%= Number(producto.price).toFixed(2) %></td>
+                    <td><%= producto.stock %></td>
+
+                    <td>
+                      <span class="estado <%= (producto.availabilityStatus || '').toLowerCase().replace(/\s+/g, '-') %>">
+                        <%= producto.availabilityStatus %>
+                      </span>
+                    </td>
+
+                    <td>
+                      <div class="acciones-fila">
+                        <button
+                          type="button"
+                          class="accion editar btn-editar-producto"
+                          title="Editar"
+                        >
+                          ✎
+                        </button>
+
+                        <button
+                          type="button"
+                          class="accion eliminar btn-eliminar-producto"
+                          title="Eliminar"
+                        >
+                          🗑
+                        </button>
+
+                        <button
+                          type="button"
+                          class="accion imagen btn-imagen-producto"
+                          title="Cambiar imagen"
+                        >
+                          🖼
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" class="sin-resultados">
+                    No hay productos registrados.
+                  </td>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>
 
         <div class="pie-tabla">
-          <p>Mostrando 4 de 125 entradas</p>
-
-          <div class="paginacion">
-            <button type="button">Anterior</button>
-            <button type="button">1</button>
-            <button type="button">2</button>
-            <button type="button" class="pagina-activa">3</button>
-            <button type="button">4</button>
-            <button type="button">5</button>
-            <button type="button">Siguiente</button>
-          </div>
+          <p>Mostrando <%= productos ? productos.length : 0 %> entradas</p>
         </div>
       </section>
     </main>
+  </div>
+
+  <div class="modal-overlay hidden" id="modalCrearProductoOverlay">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h2>Añadir Producto</h2>
+        <button type="button" class="modal-cerrar" data-close-modal="modalCrearProductoOverlay">×</button>
+      </div>
+
+      <form id="formCrearProducto" class="form-modal">
+        <input type="hidden" name="businessID" id="crearBusinessID" value="1" />
+
+        <div class="grupo-campo">
+          <label for="crearCategoryID">Categoría</label>
+          <select name="categoryID" id="crearCategoryID" required>
+            <option value="">Selecciona una categoría</option>
+            <% (categorias || []).forEach((categoria) => { %>
+              <option value="<%= categoria.categoryID %>"><%= categoria.categoryName %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="crearProductName">Nombre del producto</label>
+          <input type="text" name="productName" id="crearProductName" required />
+        </div>
+
+        <div class="grupo-campo">
+          <label for="crearDescription">Descripción</label>
+          <textarea name="description" id="crearDescription" rows="4"></textarea>
+        </div>
+
+        <div class="grupo-campo dos-columnas">
+          <div>
+            <label for="crearPrice">Precio</label>
+            <input type="number" step="0.01" min="0" name="price" id="crearPrice" required />
+          </div>
+
+          <div>
+            <label for="crearStock">Stock</label>
+            <input type="number" min="0" name="stock" id="crearStock" required />
+          </div>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="crearAvailabilityStatus">Estado</label>
+          <select name="availabilityStatus" id="crearAvailabilityStatus" required>
+            <% (estados || []).forEach((estado) => { %>
+              <option value="<%= estado %>"><%= estado %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" class="boton-secundario" data-close-modal="modalCrearProductoOverlay">Cancelar</button>
+          <button type="submit" class="boton-primario">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="modalEditarProductoOverlay">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h2>Editar Producto</h2>
+        <button type="button" class="modal-cerrar" data-close-modal="modalEditarProductoOverlay">×</button>
+      </div>
+
+      <form id="formEditarProducto" class="form-modal">
+        <input type="hidden" name="productID" id="editarProductID" />
+
+        <div class="grupo-campo">
+          <label for="editarCategoryID">Categoría</label>
+          <select name="categoryID" id="editarCategoryID" required>
+            <option value="">Selecciona una categoría</option>
+            <% (categorias || []).forEach((categoria) => { %>
+              <option value="<%= categoria.categoryID %>"><%= categoria.categoryName %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="editarProductName">Nombre del producto</label>
+          <input type="text" name="productName" id="editarProductName" required />
+        </div>
+
+        <div class="grupo-campo">
+          <label for="editarDescription">Descripción</label>
+          <textarea name="description" id="editarDescription" rows="4"></textarea>
+        </div>
+
+        <div class="grupo-campo dos-columnas">
+          <div>
+            <label for="editarPrice">Precio</label>
+            <input type="number" step="0.01" min="0" name="price" id="editarPrice" required />
+          </div>
+
+          <div>
+            <label for="editarStock">Stock</label>
+            <input type="number" min="0" name="stock" id="editarStock" required />
+          </div>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="editarAvailabilityStatus">Estado</label>
+          <select name="availabilityStatus" id="editarAvailabilityStatus" required>
+            <% (estados || []).forEach((estado) => { %>
+              <option value="<%= estado %>"><%= estado %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" class="boton-secundario" data-close-modal="modalEditarProductoOverlay">Cancelar</button>
+          <button type="submit" class="boton-primario">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="modalEliminarProductoOverlay">
+    <div class="modal-contenido modal-pequeno">
+      <div class="modal-header">
+        <h2>Confirmar eliminación</h2>
+        <button type="button" class="modal-cerrar" data-close-modal="modalEliminarProductoOverlay">×</button>
+      </div>
+
+      <div class="contenido-confirmacion">
+        <p>¿Deseas borrar definitivamente este producto?</p>
+      </div>
+
+      <div class="modal-acciones">
+        <button type="button" class="boton-secundario" data-close-modal="modalEliminarProductoOverlay">No</button>
+        <button type="button" class="boton-peligro" id="confirmarEliminarProducto">Sí</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="modalImagenProductoOverlay">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h2>Gestionar Imagen</h2>
+        <button type="button" class="modal-cerrar" data-close-modal="modalImagenProductoOverlay">×</button>
+      </div>
+
+      <form id="formImagenProducto" class="form-modal">
+        <input type="hidden" id="imagenID" name="imageID" />
+
+        <div class="grupo-campo">
+          <label for="imagenProductID">Producto</label>
+          <select name="productID" id="imagenProductID" required>
+            <option value="">Selecciona un producto</option>
+            <% (productos || []).forEach((producto) => { %>
+              <option value="<%= producto.productID %>">
+                <%= producto.productName %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="imagenURL">ImageURL</label>
+          <input type="text" name="imageURL" id="imagenURL" required />
+        </div>
+
+        <div class="modal-acciones modal-acciones-imagen">
+          <button type="button" class="boton-primario" id="btnAgregarImagen">Añadir</button>
+          <button type="button" class="boton-secundario" id="btnActualizarImagen">Actualizar</button>
+          <button type="button" class="boton-peligro" id="btnBorrarImagen">Borrar</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="/js/sidebar.js"></script>
