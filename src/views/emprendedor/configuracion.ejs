@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuración | Dale Click</title>
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/partials/sidebar.css" />
+  <link rel="stylesheet" href="/css/partials/topbar.css" />
+  <link rel="stylesheet" href="/css/configuracion.css" />
+</head>
+<body>
+  <div class="layout">
+    <%- include('../partials/sidebar', { activePage: 'configuracion' }) %>
+
+    <main class="contenido">
+      <%- include('../partials/topbar') %>
+
+      <section class="seccion-configuracion">
+        <div class="panel-superior-configuracion">
+          <div class="bloque-configuracion bloque-emprendedor">
+            <h2>Información del Emprendedor</h2>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">👤</span>
+              <div class="campo-contenido">
+                <label>Username</label>
+                <input type="text" id="username" value="Juan" disabled />
+              </div>
+              <button type="button" class="boton-editar-config" data-target="username">✎</button>
+            </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">👤</span>
+              <div class="campo-contenido">
+                <label>First Name</label>
+                <input type="text" id="firstName" value="Juan" disabled />
+              </div>
+              <button type="button" class="boton-editar-config" data-target="firstName">✎</button>
+            </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">👤</span>
+              <div class="campo-contenido">
+                <label>Last Name</label>
+                <input type="text" id="lastName" value="Juan" disabled />
+              </div>
+              <button type="button" class="boton-editar-config" data-target="lastName">✎</button>
+            </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">✉️</span>
+              <div class="campo-contenido">
+                <label>Email</label>
+                <input type="email" id="emailUsuario" value="juan.pecz@email.com" disabled />
+              </div>
+              <button type="button" class="boton-editar-config" data-target="emailUsuario">✎</button>
+            </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">📞</span>
+              <div class="campo-contenido">
+                <label>Phone</label>
+                <input type="text" id="telefonoUsuario" value="555-123-4567" disabled />
+              </div>
+              <button type="button" class="boton-editar-config" data-target="telefonoUsuario">✎</button>
+            </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">🪪</span>
+              <div class="campo-contenido">
+                <label>National ID</label>
+                <input type="text" id="cedulaUsuario" value="" disabled />
+              </div>
+              <button type="button" class="boton-editar-config" data-target="cedulaUsuario">🔒</button>
+            </div>
+          </div>
+
+          <div class="bloque-configuracion bloque-estudiante">
+            <h2>Perfil Estudiante</h2>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">🎓</span>
+              <div class="campo-contenido">
+                <label>University Name</label>
+                <input type="text" id="universidad" value="" disabled />
+              </div>
+            </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">🪪</span>
+              <div class="campo-contenido">
+                <label>Student ID Code</label>
+                <input type="text" id="codigoEstudiante" value="10301" disabled />
+              </div>
+            </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">🧑‍🎓</span>
+              <div class="campo-contenido">
+                <label>Career</label>
+                <input type="text" id="carrera" value="Administración" disabled />
+              </div>
+            </div>
+
+            <div class="bloque-status">
+              <label>Status</label>
+              <div class="status-lista">
+                <span class="estado-chip activo">Activo</span>
+                <span class="estado-chip revision">En Revisión</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bloque-foto-perfil">
+            <div class="marco-foto">
+              <img src="/images/perfil-default.png" alt="Foto de perfil" id="previewFotoPerfil" />
+            </div>
+
+            <label for="inputFotoPerfil" class="boton-cambiar-foto">
+              Cambiar Foto<br />de Perfil
+            </label>
+            <input type="file" id="inputFotoPerfil" accept="image/*" hidden />
+          </div>
+        </div>
+
+        <div class="panel-inferior-configuracion">
+          <section class="bloque-suscripcion-planes">
+            <h2>Planes de Suscripción</h2>
+
+            <div class="lista-planes">
+              <div class="fila-plan">
+                <span class="nombre-plan">🎓 Estudiante</span>
+                <button type="button" class="boton-solicitar">Solicitar</button>
+              </div>
+
+              <div class="fila-plan">
+                <span class="nombre-plan">📄 Básico</span>
+                <button type="button" class="boton-solicitar">Solicitar</button>
+              </div>
+
+              <div class="fila-plan">
+                <span class="nombre-plan">👑 Premium</span>
+                <button type="button" class="boton-solicitar">Solicitar</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="bloque-historial-suscripciones">
+            <h2>Historial de Subscripciones</h2>
+
+            <div class="contenedor-tabla-config">
+              <table class="tabla-suscripciones">
+                <thead>
+                  <tr>
+                    <th>ID Suscripción</th>
+                    <th>Plan</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Finalización</th>
+                    <th>Estado</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>1001</td>
+                    <td>Estudiante</td>
+                    <td>15/10/2023</td>
+                    <td>15/10/2023</td>
+                    <td><span class="estado-tabla cancelado">Cancelado</span></td>
+                    <td class="celda-descarga">⬇</td>
+                  </tr>
+
+                  <tr>
+                    <td>1001</td>
+                    <td>Básico</td>
+                    <td>15/10/2023</td>
+                    <td>15/10/2023</td>
+                    <td><span class="estado-tabla activo">Activo</span></td>
+                    <td class="celda-descarga">⬇</td>
+                  </tr>
+
+                  <tr>
+                    <td>1002</td>
+                    <td>Premium</td>
+                    <td>15/10/2023</td>
+                    <td>15/10/2023</td>
+                    <td><span class="estado-tabla revision">Pendiente</span></td>
+                    <td class="celda-descarga">⬇</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <div class="acciones-configuracion">
+          <button type="button" id="guardarConfiguracion" class="boton-guardar-config" disabled>Guardar cambios</button>
+          <button type="button" id="cancelarConfiguracion" class="boton-cancelar-config">Cancelar</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/configuracion.js"></script>
+</body>
+</html>

@@ -3,52 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pedidos | Dale Click</title>
+  <title>Perfil Comercial | Dale Click</title>
   <link rel="stylesheet" href="/css/global.css" />
   <link rel="stylesheet" href="/css/partials/sidebar.css" />
   <link rel="stylesheet" href="/css/partials/topbar.css" />
-  <link rel="stylesheet" href="/css/pedidos.css" />
+  <link rel="stylesheet" href="/css/perfil-comercial.css" />
 </head>
 <body>
   <div class="layout">
-    <aside class="sidebar">
-      <div class="logo-contenedor">
-        <img src="../images/logo_daleclick.png" alt="Logo Dale Click" class="logo" />
-      </div>
+    <%- include('../partials/sidebar', { activePage: 'perfil' }) %>
 
-      <nav class="menu-lateral">
-        <a href="/emprendedor/tablero" class="menu-item">Tablero</a>
-        <a href="/emprendedor/productos" class="menu-item">Productos</a>
-        <a href="/emprendedor/pedidos" class="menu-item activo">Pedidos</a>
-        <a href="/emprendedor/perfil-comercial" class="menu-item">Perfil comercial</a>
-        <a href="/emprendedor/clientes" class="menu-item">Clientes</a>
-        <a href="/emprendedor/ventas" class="menu-item">Ventas</a>
-      </nav>
+    <main class="contenido">
+      <%- include('../partials/topbar') %>
 
-      <div class="sidebar-footer">
-        <a href="#" class="menu-item">Configuración</a>
-        <a href="#" class="menu-item">Cerrar sesión</a>
-      </div>
-    </aside>
+      <section class="seccion-perfil-comercial">
+        <h1 class="titulo-seccion">Información del Negocio</h1>
 
-    <main class="contenido-principal">
-      <header class="barra-superior">
-        <button class="boton-menu" id="botonMenu">☰</button>
-        <div class="acciones-superior">
-          <span>🔍</span>
-          <span>🔔</span>
-          <span>👤</span>
+        <div class="tarjeta-negocio">
+          <div class="columna-formulario">
+            <div class="fila-campo">
+              <label>👤 Nombre del Negocio:</label>
+              <input type="text" id="nombreNegocio" value="Dale Click" disabled />
+              <button type="button" class="boton-editar-campo" data-target="nombreNegocio">✎</button>
+            </div>
+
+            <div class="fila-campo">
+              <label>☰ Descripción:</label>
+              <input type="text" id="descripcionNegocio" value="Descripción de lutos nombre del negocio" disabled />
+              <button type="button" class="boton-editar-campo" data-target="descripcionNegocio">✎</button>
+            </div>
+
+            <div class="fila-campo">
+              <label>📍 Dirección:</label>
+              <input type="text" id="direccionNegocio" value="Rua Loistalico, 143 at1 - UN2" disabled />
+              <button type="button" class="boton-editar-campo" data-target="direccionNegocio">✎</button>
+            </div>
+
+            <div class="fila-campo">
+              <label>📍 Departamento:</label>
+              <input type="text" id="departamentoNegocio" value="" disabled />
+              <button type="button" class="boton-editar-campo" data-target="departamentoNegocio">✎</button>
+            </div>
+
+            <div class="fila-campo">
+              <label>📍 Ciudad:</label>
+              <input type="text" id="ciudadNegocio" value="" disabled />
+              <button type="button" class="boton-editar-campo" data-target="ciudadNegocio">✎</button>
+            </div>
+          </div>
+
+          <div class="columna-formulario">
+            <div class="fila-campo">
+              <label>📞 Teléfono de Contacto:</label>
+              <input type="text" id="telefonoNegocio" value="(217) 352-3730" disabled />
+              <button type="button" class="boton-editar-campo" data-target="telefonoNegocio">✎</button>
+            </div>
+
+            <div class="fila-campo">
+              <label>✉️ Email de Contacto:</label>
+              <input type="email" id="emailNegocio" value="nomerich@gmail.com" disabled />
+              <button type="button" class="boton-editar-campo" data-target="emailNegocio">✎</button>
+            </div>
+
+            <div class="fila-campo">
+              <label>🖼️ Logo URL</label>
+              <input type="text" id="logoNegocio" value="" disabled />
+              <button type="button" class="boton-editar-campo" data-target="logoNegocio">✎</button>
+            </div>
+          </div>
+
+          <div class="acciones-formulario">
+            <button type="button" id="guardarCambios" class="boton-guardar" disabled>Guardar</button>
+            <button type="button" id="cancelarCambios" class="boton-cancelar">Cancelar</button>
+          </div>
         </div>
-      </header>
 
-      <section class="contenido-vista">
-        <h1>Pedidos</h1>
-        <div class="panel-blanco" id="listaPedidos"></div>
+        <div class="secciones-inferiores">
+          <section class="bloque-inferior bloque-horarios">
+            <div class="cabecera-bloque">
+              <h2>Horarios</h2>
+              <button type="button" class="boton-secundario">✎ Editar Horario</button>
+            </div>
+
+            <div class="contenedor-horarios">
+              <table class="tabla-horarios">
+                <tbody>
+                  <tr><td>Lunes</td><td>🕒 Cerrado</td></tr>
+                  <tr><td>Martes</td><td>🕒 14:00 - 21:30</td></tr>
+                  <tr><td>Miércoles</td><td>🕒 Cerrado</td></tr>
+                  <tr><td>Jueves</td><td>🕒 14:00 - 21:30</td></tr>
+                  <tr><td>Viernes</td><td>🕒 14:00 - 21:30</td></tr>
+                  <tr><td>Sábado</td><td>🕒 14:00 - 21:30</td></tr>
+                  <tr><td>Domingo</td><td>🕒 14:00 - 21:30</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="bloque-inferior bloque-suscripciones">
+            <h2>Suscripciones</h2>
+
+            <div class="contenido-suscripcion">
+              <p><strong>★ Plan Actual:</strong> <span class="texto-plan">⭐ Pro Plan</span></p>
+              <p><strong>🗓 Fecha de Inicio:</strong> 14/07/2022</p>
+              <p><strong>🗓 Fecha de Fin:</strong> 11/05/2022</p>
+              <p><strong>📣 Anuncios Destacados Restantes:</strong> 6</p>
+
+              <div class="barra-progreso">
+                <div class="progreso-actual"></div>
+              </div>
+            </div>
+          </section>
+        </div>
       </section>
     </main>
   </div>
 
   <script src="/js/sidebar.js"></script>
-  <script src="/js/pedidos.js"></script>
+  <script src="/js/perfil-comercial.js"></script>
 </body>
 </html>

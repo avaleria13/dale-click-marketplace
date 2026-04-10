@@ -1,0 +1,238 @@
+.seccion-perfil-comercial {
+  padding-top: 4px;
+}
+
+.titulo-seccion {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1d3f72;
+  margin-bottom: 14px;
+}
+
+.tarjeta-negocio {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  border: 1px solid #ddd7cb;
+  padding: 18px 18px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+  margin-bottom: 18px;
+}
+
+.columna-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fila-campo {
+  display: grid;
+  grid-template-columns: auto 1fr 42px;
+  align-items: center;
+  gap: 10px;
+}
+
+.fila-campo label {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #111;
+  white-space: nowrap;
+}
+
+.fila-campo input {
+  height: 36px;
+  border: none;
+  background-color: #dcdcdc;
+  border-radius: 4px;
+  padding: 0 10px;
+  font-size: 0.98rem;
+  color: #222;
+  outline: none;
+}
+
+.fila-campo input:disabled {
+  color: #222;
+}
+
+.fila-campo input.editando {
+  background-color: #fffdf6;
+  border: 1px solid #c9b98f;
+}
+
+.boton-editar-campo {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #163a69;
+}
+
+.acciones-formulario {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.boton-guardar,
+.boton-cancelar {
+  height: 38px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.boton-guardar {
+  background-color: #bdbdbd;
+  color: #f3f3f3;
+}
+
+.boton-guardar.activo {
+  background-color: #3f7fca;
+  color: #ffffff;
+}
+
+.boton-cancelar {
+  background: none;
+  color: #333;
+}
+
+.secciones-inferiores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+  align-items: start;
+}
+
+.bloque-inferior h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1d3f72;
+  margin-bottom: 8px;
+}
+
+.cabecera-bloque {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.boton-secundario {
+  border: 1px solid #d4d4d4;
+  background-color: #ffffff;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2d3d;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.contenedor-horarios {
+  border: 4px solid #173f79;
+  background-color: #f8f8f8;
+  padding: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.tabla-horarios {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabla-horarios td {
+  padding: 10px 16px;
+  border-bottom: 1px solid #dedede;
+  font-size: 0.98rem;
+}
+
+.tabla-horarios tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-horarios td:first-child {
+  font-weight: 700;
+}
+
+.tabla-horarios td:last-child {
+  text-align: right;
+}
+
+.bloque-suscripciones {
+  position: relative;
+}
+
+.contenido-suscripcion {
+  border: 4px solid #173f79;
+  background-color: #f8f5ef;
+  padding: 18px 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.contenido-suscripcion p {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: #111;
+}
+
+.texto-plan {
+  color: #444;
+}
+
+.barra-progreso {
+  width: 100%;
+  height: 14px;
+  background-color: #d9d9d9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.progreso-actual {
+  width: 78%;
+  height: 100%;
+  background-color: #173f79;
+  border-radius: 999px;
+}
+
+@media (max-width: 1100px) {
+  .tarjeta-negocio {
+    grid-template-columns: 1fr;
+  }
+
+  .secciones-inferiores {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .fila-campo {
+    grid-template-columns: 1fr;
+  }
+
+  .fila-campo label {
+    white-space: normal;
+  }
+
+  .boton-editar-campo {
+    width: 100%;
+  }
+
+  .acciones-formulario {
+    flex-direction: column;
+  }
+}

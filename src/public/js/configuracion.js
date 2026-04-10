@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const botonesEditar = document.querySelectorAll(".boton-editar-campo");
-  const botonGuardar = document.getElementById("guardarCambios");
-  const botonCancelar = document.getElementById("cancelarCambios");
-  const inputs = document.querySelectorAll(".fila-campo input");
+  const botonesEditar = document.querySelectorAll(".boton-editar-config");
+  const inputs = document.querySelectorAll(".campo-contenido input");
+  const botonGuardar = document.getElementById("guardarConfiguracion");
+  const botonCancelar = document.getElementById("cancelarConfiguracion");
+  const inputFotoPerfil = document.getElementById("inputFotoPerfil");
+  const previewFotoPerfil = document.getElementById("previewFotoPerfil");
 
   const valoresIniciales = {};
 
@@ -10,22 +12,25 @@ document.addEventListener("DOMContentLoaded", () => {
     valoresIniciales[input.id] = input.value;
   });
 
-  function activarBotonGuardar() {
+  function activarGuardar() {
     botonGuardar.disabled = false;
     botonGuardar.classList.add("activo");
   }
 
-  function desactivarBotonGuardar() {
+  function desactivarGuardar() {
     botonGuardar.disabled = true;
     botonGuardar.classList.remove("activo");
   }
 
   botonesEditar.forEach((boton) => {
     boton.addEventListener("click", () => {
-      const inputId = boton.dataset.target;
-      const input = document.getElementById(inputId);
+      const targetId = boton.dataset.target;
+      if (!targetId) return;
 
+      const input = document.getElementById(targetId);
       if (!input) return;
+
+      if (boton.textContent.includes("🔒")) return;
 
       input.disabled = false;
       input.classList.add("editando");
@@ -33,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.selectionStart = input.value.length;
       input.selectionEnd = input.value.length;
 
-      activarBotonGuardar();
+      activarGuardar();
     });
   });
 
@@ -44,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.classList.remove("editando");
     });
 
-    desactivarBotonGuardar();
+    desactivarGuardar();
   });
 
   botonGuardar.addEventListener("click", () => {
@@ -54,6 +59,18 @@ document.addEventListener("DOMContentLoaded", () => {
       input.classList.remove("editando");
     });
 
-    desactivarBotonGuardar();
+    desactivarGuardar();
+  });
+
+  inputFotoPerfil.addEventListener("change", (event) => {
+    const archivo = event.target.files[0];
+    if (!archivo) return;
+
+    const lector = new FileReader();
+    lector.onload = (e) => {
+      previewFotoPerfil.src = e.target.result;
+      activarGuardar();
+    };
+    lector.readAsDataURL(archivo);
   });
 });

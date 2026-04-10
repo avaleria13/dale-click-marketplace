@@ -31,6 +31,10 @@ app.get('/clientes', (req, res) => {
   res.render('emprendedor/clientes', { activePage: 'clientes' });
 });
 
+app.get('/configuracion', (req, res) => {
+  res.render('emprendedor/configuracion', { activePage: 'configuracion' });
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
