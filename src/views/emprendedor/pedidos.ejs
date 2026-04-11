@@ -14,6 +14,7 @@
     <%- include('../partials/sidebar', { activePage: 'pedidos' }) %>
 
     <main class="contenido">
+      <!-- <%- include('../partials/topbar', { usuario }) %> -->
       <%- include('../partials/topbar') %>
 
       <section class="seccion-pedidos">
@@ -22,7 +23,7 @@
             <input
               type="text"
               id="busquedaPedido"
-              placeholder="Buscar pedido por ID..."
+              placeholder="Buscar pedido por ID, nombre o apellido..."
             />
             <button type="button" class="boton-busqueda-pedido" aria-label="Buscar pedido">
               <img src="/images/buscar.png" alt="Buscar" />
@@ -31,18 +32,16 @@
 
           <select id="filtroProductoPedido" class="select-filtro-pedido">
             <option value="">Productos</option>
-            <option value="Products Picker">Products Picker</option>
-            <option value="Consented Eealage">Consented Eealage</option>
-            <option value="Voute Breelo">Voute Breelo</option>
-            <option value="Products">Products</option>
-            <option value="Laie Poduct">Laie Poduct</option>
-            <option value="Etaninno de Banas">Etaninno de Banas</option>
+            <% (productos || []).forEach((producto) => { %>
+              <option value="<%= producto.productName %>"><%= producto.productName %></option>
+            <% }) %>
           </select>
 
           <select id="filtroEstadoPedido" class="select-filtro-pedido">
             <option value="">Estado</option>
-            <option value="Reservado">Reservado</option>
-            <option value="Entregado">Entregado</option>
+            <% (estados || []).forEach((estado) => { %>
+              <option value="<%= estado %>"><%= estado %></option>
+            <% }) %>
           </select>
         </div>
 
@@ -60,133 +59,81 @@
                 <th>Email</th>
                 <th>Teléfono</th>
                 <th>Estado</th>
+                <th>Acción</th>
               </tr>
             </thead>
 
             <tbody id="tablaPedidosBody">
-              <tr>
-                <td class="id-pedido">101</td>
-                <td>2024-05-15</td>
-                <td class="nombre-producto-pedido">Products Picker</td>
-                <td>1</td>
-                <td>$ 25.00</td>
-                <td>Maia</td>
-                <td>Ausan</td>
-                <td>banilen@gmail.com</td>
-                <td>0373112349</td>
-                <td>
-                  <span class="badge-estado reservado">Reservado</span>
-                </td>
-                <td>
-                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
-                </td>
-              </tr>
+              <% if (pedidos && pedidos.length > 0) { %>
+                <% pedidos.forEach((pedido) => { %>
+                  <tr
+                    data-order-id="<%= pedido.orderID %>"
+                    data-product-name="<%= pedido.productName %>"
+                    data-first-name="<%= pedido.firstName %>"
+                    data-last-name="<%= pedido.lastName %>"
+                    data-order-status="<%= pedido.orderStatus %>"
+                  >
+                    <td class="id-pedido"><%= pedido.orderID %></td>
+                    <td>
+                      <%= new Date(pedido.orderDate).toISOString().split('T')[0] %>
+                    </td>
+                    <td class="nombre-producto-pedido"><%= pedido.productName %></td>
+                    <td><%= pedido.quantity %></td>
+                    <td>C$ <%= Number(pedido.unitPrice).toFixed(2) %></td>
+                    <td class="nombre-cliente-pedido"><%= pedido.firstName %></td>
+                    <td class="apellido-cliente-pedido"><%= pedido.lastName %></td>
+                    <td><%= pedido.email %></td>
+                    <td><%= pedido.phone %></td>
+                    <td>
+                      <div class="estado-editable">
+                        <select
+                          class="select-estado-pedido"
+                          data-order-id="<%= pedido.orderID %>"
+                          disabled
+                        >
+                          <% (estados || []).forEach((estado) => { %>
+                            <option
+                              value="<%= estado %>"
+                              <%= pedido.orderStatus === estado ? 'selected' : '' %>
+                            >
+                              <%= estado %>
+                            </option>
+                          <% }) %>
+                        </select>
 
-              <tr>
-                <td class="id-pedido">102</td>
-                <td>2024-05-15</td>
-                <td class="nombre-producto-pedido">Consented Eealage</td>
-                <td>2</td>
-                <td>$ 16.00</td>
-                <td>Seriph</td>
-                <td>Martin</td>
-                <td>rarat@gmail.com</td>
-                <td>0373411672</td>
-                <td>
-                  <span class="badge-estado entregado">Entregado</span>
-                </td>
-                <td>
-                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="id-pedido">103</td>
-                <td>2024-05-15</td>
-                <td class="nombre-producto-pedido">Voute Breelo</td>
-                <td>2</td>
-                <td>$ 23.00</td>
-                <td>Julion</td>
-                <td>Gredia</td>
-                <td>rarat@gmail.com</td>
-                <td>0370719123</td>
-                <td>
-                  <span class="badge-estado reservado">Reservado</span>
-                </td>
-                <td>
-                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="id-pedido">104</td>
-                <td>2024-05-15</td>
-                <td class="nombre-producto-pedido">Products</td>
-                <td>1</td>
-                <td>$ 45.00</td>
-                <td>Maya</td>
-                <td>Maritine</td>
-                <td>carlricn@gmail.com</td>
-                <td>0373165643</td>
-                <td>
-                  <span class="badge-estado entregado">Entregado</span>
-                </td>
-                <td>
-                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="id-pedido">105</td>
-                <td>2024-05-15</td>
-                <td class="nombre-producto-pedido">Laie Poduct</td>
-                <td>2</td>
-                <td>$ 15.00</td>
-                <td>Martia</td>
-                <td>Brandio</td>
-                <td>mukn@gmail.com</td>
-                <td>0373116701</td>
-                <td>
-                  <span class="badge-estado entregado">Entregado</span>
-                </td>
-                <td>
-                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="id-pedido">106</td>
-                <td>2024-05-15</td>
-                <td class="nombre-producto-pedido">Etaninno de Banas</td>
-                <td>1</td>
-                <td>$ 10.00</td>
-                <td>Aldisin</td>
-                <td>Cammos</td>
-                <td>anilcy@gmail.com</td>
-                <td>0373116302</td>
-                <td>
-                  <span class="badge-estado reservado">Reservado</span> 
-                </td>
-                <td>
-                  <button type="button" class="boton-accion-tabla" title="Editar pedido">✎</button>
-                </td>
-              </tr>
+                        <button
+                          type="button"
+                          class="boton-editar-estado"
+                          title="Editar estado"
+                        >
+                          ✎
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="boton-guardar-estado hidden"
+                        data-order-id="<%= pedido.orderID %>"
+                      >
+                        Guardar
+                      </button>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="11" class="sin-resultados">
+                    No hay pedidos registrados.
+                  </td>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>
 
         <div class="pie-tabla-pedidos">
-          <p>Mostrando 4 de 125 entradas</p>
-
-          <div class="paginacion-pedidos">
-            <button type="button">Anterior</button>
-            <button type="button">1</button>
-            <button type="button">2</button>
-            <button type="button" class="pagina-activa">3</button>
-            <button type="button">4</button>
-            <button type="button">5</button>
-            <button type="button">Siguiente</button>
-          </div>
+          <p>Mostrando <%= pedidos ? pedidos.length : 0 %> entradas</p>
         </div>
       </section>
     </main>

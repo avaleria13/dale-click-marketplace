@@ -244,3 +244,25 @@
 .tabla-pedidos td:nth-child(10) {
   width: 130px;
 }
+
+.hidden {
+  display: none !important;
+}
+
+.sin-resultados {
+  text-align: center;
+  padding: 24px;
+  font-weight: 600;
+  color: #555;
+}
+
+.boton-guardar-estado {
+  border: none;
+  background-color: #173f79;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}

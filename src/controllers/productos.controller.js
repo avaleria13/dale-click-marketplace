@@ -1,6 +1,15 @@
 const db = require('../config/db');
 
+const USER_ID_TEMPORAL = 2;
+
 exports.renderProductosPage = (req, res) => {
+  const usuarioQuery = `
+    SELECT userID, firstName, profileImageURL
+    FROM Users
+    WHERE userID = ? AND roleID = 2
+    LIMIT 1
+  `;
+
   const categoriasQuery = `
     SELECT categoryID, categoryName
     FROM Categories
@@ -32,23 +41,33 @@ exports.renderProductosPage = (req, res) => {
     ORDER BY p.productID DESC
   `;
 
-  db.query(categoriasQuery, (errorCategorias, categorias) => {
-    if (errorCategorias) {
-      console.error('Error al obtener categorías:', errorCategorias);
-      return res.status(500).send('Error al cargar categorías');
+  db.query(usuarioQuery, [USER_ID_TEMPORAL], (errorUsuario, usuarioRows) => {
+    if (errorUsuario) {
+      console.error('Error al obtener usuario:', errorUsuario);
+      return res.status(500).send('Error al cargar productos');
     }
 
-    db.query(productosQuery, (errorProductos, productos) => {
-      if (errorProductos) {
-        console.error('Error al obtener productos:', errorProductos);
-        return res.status(500).send('Error al cargar productos');
+    const usuario = usuarioRows[0] || null;
+
+    db.query(categoriasQuery, (errorCategorias, categorias) => {
+      if (errorCategorias) {
+        console.error('Error al obtener categorías:', errorCategorias);
+        return res.status(500).send('Error al cargar categorías');
       }
 
-      return res.render('emprendedor/productos', {
-        activePage: 'productos',
-        categorias,
-        estados: ['Disponible', 'No disponible'],
-        productos
+      db.query(productosQuery, (errorProductos, productos) => {
+        if (errorProductos) {
+          console.error('Error al obtener productos:', errorProductos);
+          return res.status(500).send('Error al cargar productos');
+        }
+
+        return res.render('emprendedor/productos', {
+          activePage: 'productos',
+          usuario,
+          categorias,
+          estados: ['Disponible', 'No disponible'],
+          productos
+        });
       });
     });
   });

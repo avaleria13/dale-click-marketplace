@@ -14,87 +14,162 @@
     <%- include('../partials/sidebar', { activePage: 'perfil' }) %>
 
     <main class="contenido">
+      <!-- <%- include('../partials/topbar', { usuario }) %> -->
       <%- include('../partials/topbar') %>
 
       <section class="seccion-perfil-comercial">
         <h1 class="titulo-seccion">Información del Negocio</h1>
 
         <div class="tarjeta-negocio">
-          <div class="columna-formulario">
-            <div class="fila-campo">
-              <label>👤 Nombre del Negocio:</label>
-              <input type="text" id="nombreNegocio" value="Dale Click" disabled />
-              <button type="button" class="boton-editar-campo" data-target="nombreNegocio">✎</button>
+          <form id="formPerfilComercial" class="form-perfil-comercial">
+            <div class="columna-formulario">
+              <div class="fila-campo">
+                <label>Nombre del Negocio:</label>
+                <input
+                  type="text"
+                  id="businessName"
+                  name="businessName"
+                  value="<%= businessProfile?.businessName || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="businessName">✎</button>
+              </div>
+
+              <div class="fila-campo">
+                <label>Descripción:</label>
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  value="<%= businessProfile?.description || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="description">✎</button>
+              </div>
+
+              <div class="fila-campo">
+                <label>Dirección:</label>
+                <input
+                  type="text"
+                  id="addressLine"
+                  name="addressLine"
+                  value="<%= businessProfile?.addressLine || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="addressLine">✎</button>
+              </div>
+
+              <div class="fila-campo">
+                <label>Departamento:</label>
+                <input
+                  type="text"
+                  id="department"
+                  name="department"
+                  value="<%= businessProfile?.department || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="department">✎</button>
+              </div>
+
+              <div class="fila-campo">
+                <label>Ciudad:</label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value="<%= businessProfile?.city || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="city">✎</button>
+              </div>
             </div>
 
-            <div class="fila-campo">
-              <label>☰ Descripción:</label>
-              <input type="text" id="descripcionNegocio" value="Descripción de lutos nombre del negocio" disabled />
-              <button type="button" class="boton-editar-campo" data-target="descripcionNegocio">✎</button>
+            <div class="columna-formulario">
+              <div class="fila-campo">
+                <label>Teléfono de Contacto:</label>
+                <input
+                  type="text"
+                  id="contactPhone"
+                  name="contactPhone"
+                  value="<%= businessProfile?.contactPhone || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="contactPhone">✎</button>
+              </div>
+
+              <div class="fila-campo">
+                <label>Email de Contacto:</label>
+                <input
+                  type="email"
+                  id="contactEmail"
+                  name="contactEmail"
+                  value="<%= businessProfile?.contactEmail || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="contactEmail">✎</button>
+              </div>
+
+              <div class="fila-campo">
+                <label>Logo URL:</label>
+                <input
+                  type="text"
+                  id="logoURL"
+                  name="logoURL"
+                  value="<%= businessProfile?.logoURL || '' %>"
+                  disabled
+                />
+                <button type="button" class="boton-editar-campo" data-target="logoURL">✎</button>
+              </div>
+
+              <div class="preview-logo">
+                <% if (businessProfile?.logoURL) { %>
+                  <img
+                    id="logoPreview"
+                    src="<%= businessProfile.logoURL %>"
+                    alt="Logo del negocio"
+                    onerror="this.style.display='none'"
+                  />
+                <% } else { %>
+                  <img id="logoPreview" src="" alt="Logo del negocio" style="display: none;" />
+                <% } %>
+              </div>
             </div>
 
-            <div class="fila-campo">
-              <label>📍 Dirección:</label>
-              <input type="text" id="direccionNegocio" value="Rua Loistalico, 143 at1 - UN2" disabled />
-              <button type="button" class="boton-editar-campo" data-target="direccionNegocio">✎</button>
+            <div class="acciones-formulario">
+              <button type="submit" id="guardarCambios" class="boton-guardar" disabled>Guardar</button>
+              <button type="button" id="cancelarCambios" class="boton-cancelar">Cancelar</button>
             </div>
-
-            <div class="fila-campo">
-              <label>📍 Departamento:</label>
-              <input type="text" id="departamentoNegocio" value="" disabled />
-              <button type="button" class="boton-editar-campo" data-target="departamentoNegocio">✎</button>
-            </div>
-
-            <div class="fila-campo">
-              <label>📍 Ciudad:</label>
-              <input type="text" id="ciudadNegocio" value="" disabled />
-              <button type="button" class="boton-editar-campo" data-target="ciudadNegocio">✎</button>
-            </div>
-          </div>
-
-          <div class="columna-formulario">
-            <div class="fila-campo">
-              <label>📞 Teléfono de Contacto:</label>
-              <input type="text" id="telefonoNegocio" value="(217) 352-3730" disabled />
-              <button type="button" class="boton-editar-campo" data-target="telefonoNegocio">✎</button>
-            </div>
-
-            <div class="fila-campo">
-              <label>✉️ Email de Contacto:</label>
-              <input type="email" id="emailNegocio" value="nomerich@gmail.com" disabled />
-              <button type="button" class="boton-editar-campo" data-target="emailNegocio">✎</button>
-            </div>
-
-            <div class="fila-campo">
-              <label>🖼️ Logo URL</label>
-              <input type="text" id="logoNegocio" value="" disabled />
-              <button type="button" class="boton-editar-campo" data-target="logoNegocio">✎</button>
-            </div>
-          </div>
-
-          <div class="acciones-formulario">
-            <button type="button" id="guardarCambios" class="boton-guardar" disabled>Guardar</button>
-            <button type="button" id="cancelarCambios" class="boton-cancelar">Cancelar</button>
-          </div>
+          </form>
         </div>
 
         <div class="secciones-inferiores">
           <section class="bloque-inferior bloque-horarios">
             <div class="cabecera-bloque">
               <h2>Horarios</h2>
-              <button type="button" class="boton-secundario">✎ Editar Horario</button>
+              <button type="button" class="boton-secundario" id="btnAbrirModalHorarios">✎ Editar Horario</button>
             </div>
 
             <div class="contenedor-horarios">
               <table class="tabla-horarios">
                 <tbody>
-                  <tr><td>Lunes</td><td>🕒 Cerrado</td></tr>
-                  <tr><td>Martes</td><td>🕒 14:00 - 21:30</td></tr>
-                  <tr><td>Miércoles</td><td>🕒 Cerrado</td></tr>
-                  <tr><td>Jueves</td><td>🕒 14:00 - 21:30</td></tr>
-                  <tr><td>Viernes</td><td>🕒 14:00 - 21:30</td></tr>
-                  <tr><td>Sábado</td><td>🕒 14:00 - 21:30</td></tr>
-                  <tr><td>Domingo</td><td>🕒 14:00 - 21:30</td></tr>
+                  <% if (businessHours && businessHours.length > 0) { %>
+                    <% businessHours.forEach((hour) => { %>
+                      <tr>
+                        <td><%= hour.dayOfWeek %></td>
+                        <td>
+                          <% if (hour.isClosed) { %>
+                            Cerrado
+                          <% } else { %>
+                            <%= String(hour.openTime || '').slice(0, 5) %> - <%= String(hour.closeTime || '').slice(0, 5) %>
+                          <% } %>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="2" class="sin-resultados">No hay horarios registrados.</td>
+                    </tr>
+                  <% } %>
                 </tbody>
               </table>
             </div>
@@ -104,10 +179,25 @@
             <h2>Suscripciones</h2>
 
             <div class="contenido-suscripcion">
-              <p><strong>★ Plan Actual:</strong> <span class="texto-plan">⭐ Pro Plan</span></p>
-              <p><strong>🗓 Fecha de Inicio:</strong> 14/07/2022</p>
-              <p><strong>🗓 Fecha de Fin:</strong> 11/05/2022</p>
-              <p><strong>📣 Anuncios Destacados Restantes:</strong> 6</p>
+              <p>
+                <strong>Plan Actual:</strong>
+                <span class="texto-plan"><%= subscription?.planName || 'Sin plan activo' %></span>
+              </p>
+
+              <p>
+                <strong>Fecha de Inicio:</strong>
+                <%= subscription?.startDate ? new Date(subscription.startDate).toISOString().split('T')[0] : 'N/D' %>
+              </p>
+
+              <p>
+                <strong>Fecha de Fin:</strong>
+                <%= subscription?.endDate ? new Date(subscription.endDate).toISOString().split('T')[0] : 'N/D' %>
+              </p>
+
+              <p>
+                <strong>Anuncios Destacados:</strong>
+                <%= subscription?.featuredAds ?? 0 %>
+              </p>
 
               <div class="barra-progreso">
                 <div class="progreso-actual"></div>
@@ -117,6 +207,56 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <div class="modal-overlay hidden" id="modalHorariosOverlay">
+    <div class="modal-contenido modal-horarios">
+      <div class="modal-header">
+        <h2>Editar Horarios</h2>
+        <button type="button" class="modal-cerrar" data-close-modal="modalHorariosOverlay">×</button>
+      </div>
+
+      <form id="formHorarios" class="form-modal">
+        <% if (businessHours && businessHours.length > 0) { %>
+          <% businessHours.forEach((hour, index) => { %>
+            <div
+              class="fila-horario"
+              data-day="<%= hour.dayOfWeek %>"
+            >
+              <div class="dia-horario"><%= hour.dayOfWeek %></div>
+
+              <label class="check-cerrado">
+                <input
+                  type="checkbox"
+                  class="input-cerrado"
+                  <%= hour.isClosed ? 'checked' : '' %>
+                />
+                Cerrado
+              </label>
+
+              <input
+                type="time"
+                class="input-hora-apertura"
+                value="<%= hour.isClosed ? '' : String(hour.openTime || '').slice(0, 5) %>"
+                <%= hour.isClosed ? 'disabled' : '' %>
+              />
+
+              <input
+                type="time"
+                class="input-hora-cierre"
+                value="<%= hour.isClosed ? '' : String(hour.closeTime || '').slice(0, 5) %>"
+                <%= hour.isClosed ? 'disabled' : '' %>
+              />
+            </div>
+          <% }) %>
+        <% } %>
+
+        <div class="modal-acciones">
+          <button type="button" class="boton-secundario" data-close-modal="modalHorariosOverlay">Cancelar</button>
+          <button type="submit" class="boton-primario">Guardar horarios</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="/js/sidebar.js"></script>

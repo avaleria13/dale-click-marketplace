@@ -141,3 +141,144 @@
     grid-template-columns: 1fr;
   }
 }
+
+.btn-contacto-general {
+  color: #173f79;
+}
+
+.sin-resultados {
+  text-align: center;
+  padding: 24px;
+  font-weight: 600;
+  color: #555;
+}
+
+.texto-resumen-clientes {
+  margin: 0;
+  font-size: 0.96rem;
+  color: #222;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.modal-contenido {
+  width: 100%;
+  max-width: 640px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-contacto {
+  max-width: 680px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e5ded2;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #173a6a;
+}
+
+.modal-cerrar {
+  border: none;
+  background: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #444;
+}
+
+.form-modal {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grupo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.grupo-campo label {
+  font-weight: 700;
+  color: #222;
+}
+
+.grupo-campo input,
+.grupo-campo textarea {
+  width: 100%;
+  border: 1px solid #d7d0c4;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 0.96rem;
+  background: #fffdf9;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.grupo-campo textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.boton-primario,
+.boton-secundario {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.boton-primario {
+  background-color: #173a6a;
+  color: #fff;
+}
+
+.boton-secundario {
+  background-color: #e8e2d8;
+  color: #222;
+}
+
+@media (max-width: 700px) {
+  .modal-acciones {
+    flex-direction: column;
+  }
+
+  .boton-primario,
+  .boton-secundario {
+    width: 100%;
+  }
+}

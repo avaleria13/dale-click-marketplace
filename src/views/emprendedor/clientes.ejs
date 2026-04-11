@@ -14,6 +14,7 @@
     <%- include('../partials/sidebar', { activePage: 'clientes' }) %>
 
     <main class="contenido">
+      <!-- <%- include('../partials/topbar', { usuario }) %> -->
       <%- include('../partials/topbar') %>
 
       <section class="seccion-clientes">
@@ -27,25 +28,23 @@
 
           <select id="filtroSegmento" class="select-filtro-cliente">
             <option value="">Segmento</option>
-            <option value="Activo">Activo</option>
-            <option value="Nuevo">Nuevo</option>
-            <option value="At-Risk">At-Risk</option>
+            <% (segmentos || []).forEach((segmento) => { %>
+              <option value="<%= segmento %>"><%= segmento %></option>
+            <% }) %>
           </select>
 
           <select id="filtroFecha" class="select-filtro-cliente">
             <option value="">Rango de Fechas</option>
-            <option value="30">Últimos 30 días</option>
-            <option value="60">Últimos 60 días</option>
-            <option value="90">Últimos 90 días</option>
+            <% (rangosFecha || []).forEach((rango) => { %>
+              <option value="<%= rango.value %>"><%= rango.label %></option>
+            <% }) %>
           </select>
 
           <select id="ordenarClientes" class="select-filtro-cliente">
             <option value="">Ordenar por...</option>
-            <option value="gasto-desc">Gasto total (mayor a menor)</option>
-            <option value="gasto-asc">Gasto total (menor a mayor)</option>
-            <option value="pedidos-desc">Pedidos (mayor a menor)</option>
-            <option value="fecha-desc">Última compra (más reciente)</option>
-            <option value="fecha-asc">Última compra (más antigua)</option>
+            <% (ordenes || []).forEach((orden) => { %>
+              <option value="<%= orden.value %>"><%= orden.label %></option>
+            <% }) %>
           </select>
         </div>
 
@@ -64,202 +63,97 @@
             </thead>
 
             <tbody id="tablaClientesBody">
-              <tr
-                data-segmento="Activo"
-                data-fecha="2023-11-05"
-                data-pedidos="15"
-                data-gasto="720"
-              >
-                <td>CL0001</td>
-                <td>Juan</td>
-                <td>Pérez</td>
-                <td>
-                  <div class="info-contacto">
-                    <div class="texto-contacto">
-                      <p>juan.perez@gmail.com</p>
-                      <p>(217) 352-3730</p>
-                    </div>
-                    <div class="acciones-contacto">
-                      <button type="button" class="btn-contacto btn-correo" aria-label="Enviar correo">✉</button>
-                      <button type="button" class="btn-contacto btn-whatsapp" aria-label="Enviar WhatsApp">🟢</button>
-                    </div>
-                  </div>
-                </td>
-                <td class="celda-pedidos">15 🛒</td>
-                <td class="celda-gasto">$720.00</td>
-                <td class="celda-fecha">05/11/2023</td>
-              </tr>
+              <% if (clientes && clientes.length > 0) { %>
+                <% clientes.forEach((cliente) => { %>
+                  <tr
+                    data-client-id="<%= cliente.userID %>"
+                    data-client-email="<%= cliente.email || '' %>"
+                    data-client-name="<%= cliente.firstName || '' %>"
+                    data-segmento="<%= cliente.segmento %>"
+                    data-fecha="<%= cliente.ultimaCompra || '' %>"
+                    data-pedidos="<%= cliente.totalPedidos %>"
+                    data-gasto="<%= cliente.gastoTotal %>"
+                  >
+                    <td><%= cliente.clientCode %></td>
+                    <td><%= cliente.firstName %></td>
+                    <td><%= cliente.lastName %></td>
+                    <td>
+                      <div class="info-contacto">
+                        <div class="texto-contacto">
+                          <p><%= cliente.email || 'Sin correo' %></p>
+                          <p><%= cliente.phone || 'Sin teléfono' %></p>
+                        </div>
 
-              <tr
-                data-segmento="Activo"
-                data-fecha="2023-11-05"
-                data-pedidos="15"
-                data-gasto="720"
-              >
-                <td>CL0002</td>
-                <td>Juan</td>
-                <td>Pérez</td>
-                <td>
-                  <div class="info-contacto">
-                    <div class="texto-contacto">
-                      <p>nomerich@gmail.com</p>
-                      <p>(217) 352-3730</p>
-                    </div>
-                    <div class="acciones-contacto">
-                      <button type="button" class="btn-contacto btn-correo" aria-label="Enviar correo">✉</button>
-                      <button type="button" class="btn-contacto btn-whatsapp" aria-label="Enviar WhatsApp">🟢</button>
-                    </div>
-                  </div>
-                </td>
-                <td class="celda-pedidos">15 🛒</td>
-                <td class="celda-gasto">$720.00</td>
-                <td class="celda-fecha">05/11/2023</td>
-              </tr>
-
-              <tr
-                data-segmento="Nuevo"
-                data-fecha="2023-11-05"
-                data-pedidos="13"
-                data-gasto="650"
-              >
-                <td>CL0003</td>
-                <td>Juan Anmira</td>
-                <td>Bartlien</td>
-                <td>
-                  <div class="info-contacto">
-                    <div class="texto-contacto">
-                      <p>nomerich@gmail.com</p>
-                      <p>(217) 352-3730</p>
-                    </div>
-                    <div class="acciones-contacto">
-                      <button type="button" class="btn-contacto btn-correo" aria-label="Enviar correo">✉</button>
-                      <button type="button" class="btn-contacto btn-whatsapp" aria-label="Enviar WhatsApp">🟢</button>
-                    </div>
-                  </div>
-                </td>
-                <td class="celda-pedidos">13 🛒</td>
-                <td class="celda-gasto">$650.00</td>
-                <td class="celda-fecha">05/11/2023</td>
-              </tr>
-
-              <tr
-                data-segmento="Activo"
-                data-fecha="2023-11-05"
-                data-pedidos="10"
-                data-gasto="720"
-              >
-                <td>CL0004</td>
-                <td>Juan Martin</td>
-                <td>Martin</td>
-                <td>
-                  <div class="info-contacto">
-                    <div class="texto-contacto">
-                      <p>nomerich@gmail.com</p>
-                      <p>(217) 352-3730</p>
-                    </div>
-                    <div class="acciones-contacto">
-                      <button type="button" class="btn-contacto btn-correo" aria-label="Enviar correo">✉</button>
-                      <button type="button" class="btn-contacto btn-whatsapp" aria-label="Enviar WhatsApp">🟢</button>
-                    </div>
-                  </div>
-                </td>
-                <td class="celda-pedidos">10 🛒</td>
-                <td class="celda-gasto">$720.00</td>
-                <td class="celda-fecha">05/11/2023</td>
-              </tr>
-
-              <tr
-                data-segmento="At-Risk"
-                data-fecha="2023-11-05"
-                data-pedidos="9"
-                data-gasto="420"
-              >
-                <td>CL0005</td>
-                <td>Martian</td>
-                <td>Martez</td>
-                <td>
-                  <div class="info-contacto">
-                    <div class="texto-contacto">
-                      <p>nomerich@gmail.com</p>
-                      <p>(217) 352-3730</p>
-                    </div>
-                    <div class="acciones-contacto">
-                      <button type="button" class="btn-contacto btn-correo" aria-label="Enviar correo">✉</button>
-                      <button type="button" class="btn-contacto btn-whatsapp" aria-label="Enviar WhatsApp">🟢</button>
-                    </div>
-                  </div>
-                </td>
-                <td class="celda-pedidos">9 🛒</td>
-                <td class="celda-gasto">$420.00</td>
-                <td class="celda-fecha">05/11/2023</td>
-              </tr>
-
-              <tr
-                data-segmento="Activo"
-                data-fecha="2023-11-05"
-                data-pedidos="3"
-                data-gasto="426"
-              >
-                <td>CL0006</td>
-                <td>Juan</td>
-                <td>Pérez</td>
-                <td>
-                  <div class="info-contacto">
-                    <div class="texto-contacto">
-                      <p>nomerich@gmail.com</p>
-                      <p>(217) 352-3730</p>
-                    </div>
-                    <div class="acciones-contacto">
-                      <button type="button" class="btn-contacto btn-correo" aria-label="Enviar correo">✉</button>
-                      <button type="button" class="btn-contacto btn-whatsapp" aria-label="Enviar WhatsApp">🟢</button>
-                    </div>
-                  </div>
-                </td>
-                <td class="celda-pedidos">3 🛒</td>
-                <td class="celda-gasto">$426.00</td>
-                <td class="celda-fecha">05/11/2023</td>
-              </tr>
-
-              <tr
-                data-segmento="Nuevo"
-                data-fecha="2023-11-05"
-                data-pedidos="1"
-                data-gasto="720"
-              >
-                <td>CL0007</td>
-                <td>Juan</td>
-                <td>Pérez</td>
-                <td>
-                  <div class="info-contacto">
-                    <div class="texto-contacto">
-                      <p>nomerich@gmail.com</p>
-                      <p>(217) 352-3730</p>
-                    </div>
-                    <div class="acciones-contacto">
-                      <button type="button" class="btn-contacto btn-correo" aria-label="Enviar correo">✉</button>
-                      <button type="button" class="btn-contacto btn-whatsapp" aria-label="Enviar WhatsApp">🟢</button>
-                    </div>
-                  </div>
-                </td>
-                <td class="celda-pedidos">1 🛒</td>
-                <td class="celda-gasto">$720.00</td>
-                <td class="celda-fecha">05/11/2023</td>
-              </tr>
+                        <div class="acciones-contacto">
+                          <button
+                            type="button"
+                            class="btn-contacto btn-contacto-general"
+                            aria-label="Contactar cliente"
+                            title="Contactar cliente"
+                          >
+                            ☎
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="celda-pedidos"><%= cliente.totalPedidos %> 🛒</td>
+                    <td class="celda-gasto">C$<%= Number(cliente.gastoTotal).toFixed(2) %></td>
+                    <td class="celda-fecha">
+                      <%= cliente.ultimaCompra ? cliente.ultimaCompra.split('-').reverse().join('/') : 'N/D' %>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" class="sin-resultados">
+                    No hay clientes registrados.
+                  </td>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>
 
         <div class="pie-clientes">
-          <div class="paginacion-clientes">
-            <button type="button" class="btn-paginacion">|◀</button>
-            <span>Page</span>
-            <input type="text" value="1" class="input-pagina" readonly />
-            <span>of 30</span>
-            <button type="button" class="btn-paginacion">▶|</button>
-          </div>
+          <p class="texto-resumen-clientes">
+            Mostrando <span id="contadorClientesVisibles"><%= clientes ? clientes.length : 0 %></span> clientes
+          </p>
         </div>
       </section>
     </main>
+  </div>
+
+  <div class="modal-overlay hidden" id="modalContactoClienteOverlay">
+    <div class="modal-contenido modal-contacto">
+      <div class="modal-header">
+        <h2>Contactar Cliente</h2>
+        <button type="button" class="modal-cerrar" data-close-modal="modalContactoClienteOverlay">×</button>
+      </div>
+
+      <form id="formContactoCliente" class="form-modal">
+        <input type="hidden" id="contactClientId" name="clientId" />
+
+        <div class="grupo-campo">
+          <label for="contactClientEmail">Correo del cliente</label>
+          <input type="email" id="contactClientEmail" name="clientEmail" readonly />
+        </div>
+
+        <div class="grupo-campo">
+          <label for="contactSubject">Asunto</label>
+          <input type="text" id="contactSubject" name="subject" required />
+        </div>
+
+        <div class="grupo-campo">
+          <label for="contactMessage">Mensaje</label>
+          <textarea id="contactMessage" name="message" rows="6" required></textarea>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" class="boton-secundario" data-close-modal="modalContactoClienteOverlay">Cancelar</button>
+          <button type="submit" class="boton-primario">Enviar</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="/js/sidebar.js"></script>

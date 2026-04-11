@@ -16,6 +16,11 @@
       <img src="/images/notificaciones.png" alt="Notificaciones">
     </button>
 
-    <img src="/images/perfil-usuario.png" alt="Perfil de usuario" class="avatar-usuario" />
+    <img
+      src="<%= (typeof usuario !== 'undefined' && usuario && usuario.profileImageURL) ? usuario.profileImageURL : '/images/perfil-usuario.png' %>"
+      alt="Perfil de usuario"
+      class="avatar-usuario"
+      onerror="this.src='/images/perfil-usuario.png'"
+    />
   </div>
 </header>

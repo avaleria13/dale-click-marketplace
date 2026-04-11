@@ -14,27 +14,27 @@
     <%- include('../partials/sidebar', { activePage: 'configuracion' }) %>
 
     <main class="contenido">
-      <%- include('../partials/topbar') %>
+      <%- include('../partials/topbar', { usuario }) %>
 
       <section class="seccion-configuracion">
         <div class="panel-superior-configuracion">
-          <div class="bloque-configuracion bloque-emprendedor">
+          <form id="formConfiguracionUsuario" class="bloque-configuracion bloque-emprendedor">
             <h2>Información del Emprendedor</h2>
 
             <div class="fila-campo-config">
               <span class="icono-campo">👤</span>
               <div class="campo-contenido">
                 <label>Username</label>
-                <input type="text" id="username" value="Juan" disabled />
+                <input type="text" id="username" name="username" value="<%= usuario?.username || '' %>" disabled />
               </div>
-              <button type="button" class="boton-editar-config" data-target="username">✎</button>
+              <button type="button" class="boton-editar-config bloqueado" title="No editable">🔒</button>
             </div>
 
             <div class="fila-campo-config">
               <span class="icono-campo">👤</span>
               <div class="campo-contenido">
                 <label>First Name</label>
-                <input type="text" id="firstName" value="Juan" disabled />
+                <input type="text" id="firstName" name="firstName" value="<%= usuario?.firstName || '' %>" disabled />
               </div>
               <button type="button" class="boton-editar-config" data-target="firstName">✎</button>
             </div>
@@ -43,7 +43,7 @@
               <span class="icono-campo">👤</span>
               <div class="campo-contenido">
                 <label>Last Name</label>
-                <input type="text" id="lastName" value="Juan" disabled />
+                <input type="text" id="lastName" name="lastName" value="<%= usuario?.lastName || '' %>" disabled />
               </div>
               <button type="button" class="boton-editar-config" data-target="lastName">✎</button>
             </div>
@@ -52,29 +52,38 @@
               <span class="icono-campo">✉️</span>
               <div class="campo-contenido">
                 <label>Email</label>
-                <input type="email" id="emailUsuario" value="juan.pecz@email.com" disabled />
+                <input type="email" id="email" name="email" value="<%= usuario?.email || '' %>" disabled />
               </div>
-              <button type="button" class="boton-editar-config" data-target="emailUsuario">✎</button>
+              <button type="button" class="boton-editar-config" data-target="email">✎</button>
             </div>
 
             <div class="fila-campo-config">
               <span class="icono-campo">📞</span>
               <div class="campo-contenido">
                 <label>Phone</label>
-                <input type="text" id="telefonoUsuario" value="555-123-4567" disabled />
+                <input type="text" id="phone" name="phone" value="<%= usuario?.phone || '' %>" disabled />
               </div>
-              <button type="button" class="boton-editar-config" data-target="telefonoUsuario">✎</button>
+              <button type="button" class="boton-editar-config" data-target="phone">✎</button>
             </div>
 
             <div class="fila-campo-config">
               <span class="icono-campo">🪪</span>
               <div class="campo-contenido">
                 <label>National ID</label>
-                <input type="text" id="cedulaUsuario" value="" disabled />
+                <input type="text" id="nationalID" name="nationalID" value="<%= usuario?.nationalID || '' %>" disabled />
               </div>
-              <button type="button" class="boton-editar-config" data-target="cedulaUsuario">🔒</button>
+              <button type="button" class="boton-editar-config bloqueado" title="No editable">🔒</button>
             </div>
-          </div>
+
+            <div class="fila-campo-config">
+              <span class="icono-campo">🔑</span>
+              <div class="campo-contenido">
+                <label>Password</label>
+                <input type="text" id="password" name="password" value="<%= usuario?.password || '' %>" disabled />
+              </div>
+              <button type="button" class="boton-editar-config" data-target="password">✎</button>
+            </div>
+          </form>
 
           <div class="bloque-configuracion bloque-estudiante">
             <h2>Perfil Estudiante</h2>
@@ -83,7 +92,7 @@
               <span class="icono-campo">🎓</span>
               <div class="campo-contenido">
                 <label>University Name</label>
-                <input type="text" id="universidad" value="" disabled />
+                <input type="text" value="<%= studentProfile?.universityName || '' %>" disabled />
               </div>
             </div>
 
@@ -91,7 +100,7 @@
               <span class="icono-campo">🪪</span>
               <div class="campo-contenido">
                 <label>Student ID Code</label>
-                <input type="text" id="codigoEstudiante" value="10301" disabled />
+                <input type="text" value="<%= studentProfile?.studentIDCode || '' %>" disabled />
               </div>
             </div>
 
@@ -99,22 +108,32 @@
               <span class="icono-campo">🧑‍🎓</span>
               <div class="campo-contenido">
                 <label>Career</label>
-                <input type="text" id="carrera" value="Administración" disabled />
+                <input type="text" value="<%= studentProfile?.career || '' %>" disabled />
               </div>
             </div>
 
             <div class="bloque-status">
               <label>Status</label>
               <div class="status-lista">
-                <span class="estado-chip activo">Activo</span>
-                <span class="estado-chip revision">En Revisión</span>
+                <% if (studentProfile) { %>
+                  <span class="estado-chip <%= studentProfile.isStudentVerified ? 'activo' : 'revision' %>">
+                    <%= studentProfile.isStudentVerified ? 'Activo' : 'En Revisión' %>
+                  </span>
+                <% } else { %>
+                  <span class="estado-chip revision">Sin perfil estudiante</span>
+                <% } %>
               </div>
             </div>
           </div>
 
           <div class="bloque-foto-perfil">
             <div class="marco-foto">
-              <img src="/images/perfil-default.png" alt="Foto de perfil" id="previewFotoPerfil" />
+              <img
+                src="<%= usuario?.profileImageURL || '/images/perfil-usuario.png' %>"
+                alt="Foto de perfil"
+                id="previewFotoPerfil"
+                onerror="this.src='/images/perfil-usuario.png'"
+              />
             </div>
 
             <label for="inputFotoPerfil" class="boton-cambiar-foto">
@@ -129,20 +148,23 @@
             <h2>Planes de Suscripción</h2>
 
             <div class="lista-planes">
-              <div class="fila-plan">
-                <span class="nombre-plan">🎓 Estudiante</span>
-                <button type="button" class="boton-solicitar">Solicitar</button>
-              </div>
+              <% (planes || []).forEach((plan) => { %>
+                <div class="fila-plan">
+                  <div class="detalle-plan">
+                    <span class="nombre-plan"><%= plan.planName %></span>
+                    <small>C$<%= Number(plan.price).toFixed(2) %> · <%= plan.durationDays %> días</small>
+                  </div>
 
-              <div class="fila-plan">
-                <span class="nombre-plan">📄 Básico</span>
-                <button type="button" class="boton-solicitar">Solicitar</button>
-              </div>
-
-              <div class="fila-plan">
-                <span class="nombre-plan">👑 Premium</span>
-                <button type="button" class="boton-solicitar">Solicitar</button>
-              </div>
+                  <button
+                    type="button"
+                    class="boton-solicitar"
+                    data-plan-id="<%= plan.planID %>"
+                    data-plan-name="<%= plan.planName %>"
+                  >
+                    Solicitar
+                  </button>
+                </div>
+              <% }) %>
             </div>
           </section>
 
@@ -158,37 +180,29 @@
                     <th>Fecha de Inicio</th>
                     <th>Fecha de Finalización</th>
                     <th>Estado</th>
-                    <th></th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  <tr>
-                    <td>1001</td>
-                    <td>Estudiante</td>
-                    <td>15/10/2023</td>
-                    <td>15/10/2023</td>
-                    <td><span class="estado-tabla cancelado">Cancelado</span></td>
-                    <td class="celda-descarga">⬇</td>
-                  </tr>
-
-                  <tr>
-                    <td>1001</td>
-                    <td>Básico</td>
-                    <td>15/10/2023</td>
-                    <td>15/10/2023</td>
-                    <td><span class="estado-tabla activo">Activo</span></td>
-                    <td class="celda-descarga">⬇</td>
-                  </tr>
-
-                  <tr>
-                    <td>1002</td>
-                    <td>Premium</td>
-                    <td>15/10/2023</td>
-                    <td>15/10/2023</td>
-                    <td><span class="estado-tabla revision">Pendiente</span></td>
-                    <td class="celda-descarga">⬇</td>
-                  </tr>
+                  <% if (historialSuscripciones && historialSuscripciones.length > 0) { %>
+                    <% historialSuscripciones.forEach((item) => { %>
+                      <tr>
+                        <td><%= item.subscriptionID %></td>
+                        <td><%= item.planName %></td>
+                        <td><%= item.startDate ? new Date(item.startDate).toISOString().split('T')[0] : 'N/D' %></td>
+                        <td><%= item.endDate ? new Date(item.endDate).toISOString().split('T')[0] : 'N/D' %></td>
+                        <td>
+                          <span class="estado-tabla <%= (item.status || '').toLowerCase() === 'activo' ? 'activo' : (item.status || '').toLowerCase() === 'cancelado' ? 'cancelado' : 'revision' %>">
+                            <%= item.status || 'Pendiente' %>
+                          </span>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="5" class="sin-resultados">No hay suscripciones registradas.</td>
+                    </tr>
+                  <% } %>
                 </tbody>
               </table>
             </div>
@@ -201,6 +215,34 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <div class="modal-overlay hidden" id="modalSolicitarPlanOverlay">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h2>Solicitar Plan</h2>
+        <button type="button" class="modal-cerrar" data-close-modal="modalSolicitarPlanOverlay">×</button>
+      </div>
+
+      <form id="formSolicitarPlan" class="form-modal">
+        <input type="hidden" id="solicitudPlanID" name="planID" />
+
+        <div class="grupo-campo">
+          <label for="solicitudPlanNombre">Plan</label>
+          <input type="text" id="solicitudPlanNombre" name="planName" readonly />
+        </div>
+
+        <div class="grupo-campo">
+          <label for="solicitudMensaje">Mensaje</label>
+          <textarea id="solicitudMensaje" name="message" rows="5" required></textarea>
+        </div>
+
+        <div class="modal-acciones">
+          <button type="button" class="boton-secundario" data-close-modal="modalSolicitarPlanOverlay">Cancelar</button>
+          <button type="submit" class="boton-primario">Enviar solicitud</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="/js/sidebar.js"></script>

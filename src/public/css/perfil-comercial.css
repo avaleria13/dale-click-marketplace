@@ -236,3 +236,153 @@
     flex-direction: column;
   }
 }
+
+.form-perfil-comercial {
+  display: contents;
+}
+
+.preview-logo {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.preview-logo img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border: 1px solid #ddd7cb;
+  border-radius: 10px;
+  background: #f7f7f7;
+  padding: 8px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.sin-resultados {
+  text-align: center;
+  padding: 20px;
+  color: #555;
+  font-weight: 600;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.modal-contenido {
+  width: 100%;
+  max-width: 820px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-horarios {
+  max-width: 900px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e5ded2;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #173a6a;
+}
+
+.modal-cerrar {
+  border: none;
+  background: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #444;
+}
+
+.form-modal {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fila-horario {
+  display: grid;
+  grid-template-columns: 140px 120px 1fr 1fr;
+  gap: 14px;
+  align-items: center;
+}
+
+.dia-horario {
+  font-weight: 700;
+  color: #1d3f72;
+}
+
+.check-cerrado {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.input-hora-apertura,
+.input-hora-cierre {
+  width: 100%;
+  border: 1px solid #d7d0c4;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.96rem;
+  background: #fffdf9;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+
+.boton-primario {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: #173a6a;
+  color: #fff;
+}
+
+@media (max-width: 800px) {
+  .fila-horario {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-acciones {
+    flex-direction: column;
+  }
+
+  .boton-primario,
+  .boton-secundario {
+    width: 100%;
+  }
+}
