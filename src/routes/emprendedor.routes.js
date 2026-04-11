@@ -24,3 +24,11 @@ router.get('/clientes', (req, res) => {
 });
 
 module.exports = router;
+
+/*Login*/
+const controller = require('../controllers/emprendedor.controller');
+const { isAuthenticated } = require('../middlewares/auth.middleware');
+router.get('/tablero', isAuthenticated, controller.tablero);
+
+/*const { isAuthenticated } = require('../middlewares/auth.middleware');
+router.get('/tablero', isAuthenticated, controller.tablero);*/

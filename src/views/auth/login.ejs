@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Dale Click</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<div class="login-container">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <img src="/images/logo_daleclick.png" alt="Dale Click">
+  </div>
+
+  <!-- PANELES -->
+  <div class="paneles">
+
+    <div class="panel admin" onclick="selectRole('admin')">
+      <h2>Administrador</h2>
+    </div>
+
+    <div class="panel vendedor" onclick="selectRole('vendedor')">
+      <h2>Vendedor</h2>
+    </div>
+
+  </div>
+
+  <!-- FORM -->
+  <form id="loginForm" action="/login" method="POST" class="form hidden">
+
+    <input type="hidden" name="role" id="role">
+
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+
+    <button type="submit" id="btnLogin"></button>
+
+    <a href="#" id="forgotLink"></a>
+
+  </form>
+
+</div>
+
+<script src="/js/login.js"></script>
+</body>
+</html>
