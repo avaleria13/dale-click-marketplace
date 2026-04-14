@@ -14,7 +14,6 @@
     <%- include('../partials/sidebar', { activePage: 'pedidos' }) %>
 
     <main class="contenido">
-      <!-- <%- include('../partials/topbar', { usuario }) %> -->
       <%- include('../partials/topbar') %>
 
       <section class="seccion-pedidos">
@@ -74,49 +73,33 @@
                     data-order-status="<%= pedido.orderStatus %>"
                   >
                     <td class="id-pedido"><%= pedido.orderID %></td>
-                    <td>
+                    <td class="fecha-pedido">
                       <%= new Date(pedido.orderDate).toISOString().split('T')[0] %>
                     </td>
                     <td class="nombre-producto-pedido"><%= pedido.productName %></td>
-                    <td><%= pedido.quantity %></td>
-                    <td>C$ <%= Number(pedido.unitPrice).toFixed(2) %></td>
+                    <td class="celda-centrada"><%= pedido.quantity %></td>
+                    <td class="precio-pedido">C$ <%= Number(pedido.unitPrice).toFixed(2) %></td>
                     <td class="nombre-cliente-pedido"><%= pedido.firstName %></td>
                     <td class="apellido-cliente-pedido"><%= pedido.lastName %></td>
-                    <td><%= pedido.email %></td>
-                    <td><%= pedido.phone %></td>
-                    <td>
-                      <div class="estado-editable">
-                        <select
-                          class="select-estado-pedido"
-                          data-order-id="<%= pedido.orderID %>"
-                          disabled
-                        >
-                          <% (estados || []).forEach((estado) => { %>
-                            <option
-                              value="<%= estado %>"
-                              <%= pedido.orderStatus === estado ? 'selected' : '' %>
-                            >
-                              <%= estado %>
-                            </option>
-                          <% }) %>
-                        </select>
-
-                        <button
-                          type="button"
-                          class="boton-editar-estado"
-                          title="Editar estado"
-                        >
-                          ✎
-                        </button>
-                      </div>
+                    <td class="email-pedido"><%= pedido.email %></td>
+                    <td class="telefono-pedido"><%= pedido.phone %></td>
+                    <td class="celda-estado">
+                      <span
+                        class="badge-estado <%= String(pedido.orderStatus).toLowerCase() === 'entregado' ? 'estado-entregado' : 'estado-reservado' %>"
+                      >
+                        <%= pedido.orderStatus %>
+                      </span>
                     </td>
-                    <td>
+                    <td class="celda-accion">
                       <button
                         type="button"
-                        class="boton-guardar-estado hidden"
+                        class="boton-editar-estado"
                         data-order-id="<%= pedido.orderID %>"
+                        data-order-status="<%= pedido.orderStatus %>"
+                        title="Editar estado"
+                        aria-label="Editar estado"
                       >
-                        Guardar
+                        ✎
                       </button>
                     </td>
                   </tr>
@@ -137,6 +120,41 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <div id="modalEstado" class="modal hidden" aria-hidden="true">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h3>Cambiar estado del pedido</h3>
+        <button type="button" id="cerrarModalEstado" class="boton-cerrar-modal" aria-label="Cerrar modal">
+          ×
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="texto-modal">
+          Selecciona el nuevo estado para este pedido.
+        </p>
+
+        <div class="grupo-modal">
+          <label for="nuevoEstadoPedido">Nuevo estado</label>
+          <select id="nuevoEstadoPedido" class="select-modal-estado">
+            <% (estados || []).forEach((estado) => { %>
+              <option value="<%= estado %>"><%= estado %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-botones">
+        <button type="button" id="cancelarCambioEstado" class="boton-secundario-modal">
+          Cancelar
+        </button>
+        <button type="button" id="confirmarCambioEstado" class="boton-primario-modal">
+          Guardar cambios
+        </button>
+      </div>
+    </div>
   </div>
 
   <script src="/js/sidebar.js"></script>

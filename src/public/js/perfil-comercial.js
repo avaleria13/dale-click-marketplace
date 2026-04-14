@@ -3,28 +3,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const botonGuardar = document.getElementById("guardarCambios");
   const botonCancelar = document.getElementById("cancelarCambios");
   const formPerfil = document.getElementById("formPerfilComercial");
-  const inputs = document.querySelectorAll(".fila-campo input");
+  const estadoEdicion = document.getElementById("estadoEdicion");
+
+  const inputs = document.querySelectorAll(".campo-card input");
   const logoInput = document.getElementById("logoURL");
-  const logoPreview = document.getElementById("logoPreview");
+  const logoPreviewHero = document.getElementById("logoPreviewHero");
+  const heroBusinessName = document.querySelector(".hero-logo-info h2");
+  const heroBusinessLocation = document.querySelector(".hero-logo-info p");
+
+  const businessNameInput = document.getElementById("businessName");
+  const cityInput = document.getElementById("city");
+  const departmentInput = document.getElementById("department");
 
   const btnAbrirModalHorarios = document.getElementById("btnAbrirModalHorarios");
   const modalHorarios = document.getElementById("modalHorariosOverlay");
   const formHorarios = document.getElementById("formHorarios");
 
   const valoresIniciales = {};
+  let hayCambios = false;
 
   inputs.forEach((input) => {
     valoresIniciales[input.id] = input.value;
   });
 
   function activarBotonGuardar() {
+    if (!botonGuardar) return;
     botonGuardar.disabled = false;
     botonGuardar.classList.add("activo");
   }
 
   function desactivarBotonGuardar() {
+    if (!botonGuardar) return;
     botonGuardar.disabled = true;
     botonGuardar.classList.remove("activo");
+  }
+
+  function actualizarEstadoEdicion() {
+    if (!estadoEdicion) return;
+
+    const hayInputEditando = Array.from(inputs).some(
+      (input) => !input.disabled || input.classList.contains("editando")
+    );
+
+    if (hayInputEditando || hayCambios) {
+      estadoEdicion.textContent = "Modo edición";
+    } else {
+      estadoEdicion.textContent = "Modo vista";
+    }
   }
 
   function abrirModal(modal) {
@@ -38,18 +63,43 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function actualizarPreviewLogo() {
-    if (!logoInput || !logoPreview) return;
+    if (!logoPreviewHero) return;
 
-    const url = logoInput.value.trim();
+    const url = logoInput?.value?.trim();
 
     if (!url) {
-      logoPreview.src = "";
-      logoPreview.style.display = "none";
+      logoPreviewHero.src = "/images/logo_daleclick.png";
       return;
     }
 
-    logoPreview.src = url;
-    logoPreview.style.display = "block";
+    logoPreviewHero.src = url;
+  }
+
+  function actualizarHeroInfo() {
+    if (heroBusinessName && businessNameInput) {
+      const nombre = businessNameInput.value.trim();
+      heroBusinessName.textContent = nombre || "Tu negocio";
+    }
+
+    if (heroBusinessLocation && cityInput && departmentInput) {
+      const ciudad = cityInput.value.trim() || "Ciudad no registrada";
+      const departamento = departmentInput.value.trim() || "Departamento no registrado";
+      heroBusinessLocation.textContent = `${ciudad}, ${departamento}`;
+    }
+  }
+
+  function revisarCambios() {
+    hayCambios = Array.from(inputs).some(
+      (input) => input.value !== valoresIniciales[input.id]
+    );
+
+    if (hayCambios) {
+      activarBotonGuardar();
+    } else {
+      desactivarBotonGuardar();
+    }
+
+    actualizarEstadoEdicion();
   }
 
   async function actualizarPerfil(data) {
@@ -86,10 +136,27 @@ document.addEventListener("DOMContentLoaded", () => {
       input.disabled = false;
       input.classList.add("editando");
       input.focus();
-      input.selectionStart = input.value.length;
-      input.selectionEnd = input.value.length;
 
-      activarBotonGuardar();
+      const largo = input.value.length;
+      input.setSelectionRange(largo, largo);
+
+      actualizarEstadoEdicion();
+      revisarCambios();
+    });
+  });
+
+  inputs.forEach((input) => {
+    input.addEventListener("input", () => {
+      actualizarPreviewLogo();
+      actualizarHeroInfo();
+      revisarCambios();
+    });
+
+    input.addEventListener("blur", () => {
+      if (input.value !== valoresIniciales[input.id]) {
+        input.classList.add("editando");
+      }
+      revisarCambios();
     });
   });
 
@@ -101,13 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
         input.classList.remove("editando");
       });
 
+      hayCambios = false;
       actualizarPreviewLogo();
+      actualizarHeroInfo();
       desactivarBotonGuardar();
+      actualizarEstadoEdicion();
     });
-  }
-
-  if (logoInput) {
-    logoInput.addEventListener("input", actualizarPreviewLogo);
   }
 
   if (formPerfil) {
@@ -133,8 +199,13 @@ document.addEventListener("DOMContentLoaded", () => {
           input.classList.remove("editando");
         });
 
+        hayCambios = false;
         actualizarPreviewLogo();
+        actualizarHeroInfo();
         desactivarBotonGuardar();
+        actualizarEstadoEdicion();
+
+        alert("Perfil comercial actualizado correctamente.");
       } catch (error) {
         console.error("Error al actualizar perfil comercial:", error);
         alert("No se pudo actualizar el perfil comercial.");
@@ -230,4 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   actualizarPreviewLogo();
+  actualizarHeroInfo();
+  desactivarBotonGuardar();
+  actualizarEstadoEdicion();
 });

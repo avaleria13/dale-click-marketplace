@@ -4,35 +4,74 @@ document.addEventListener("DOMContentLoaded", () => {
   const filtroEstado = document.getElementById("filtroEstadoPedido");
   const tablaBody = document.getElementById("tablaPedidosBody");
 
-  function aplicarColorEstado(select) {
-    const valor = (select.value || "").trim().toLowerCase();
+  const modalEstado = document.getElementById("modalEstado");
+  const selectNuevoEstado = document.getElementById("nuevoEstadoPedido");
+  const btnCerrarModal = document.getElementById("cerrarModalEstado");
+  const btnCancelarModal = document.getElementById("cancelarCambioEstado");
+  const btnConfirmarCambio = document.getElementById("confirmarCambioEstado");
 
-    select.classList.remove("estado-reservado", "estado-entregado");
+  let orderIDSeleccionado = null;
+  let filaSeleccionada = null;
 
-    if (valor === "reservado") {
-      select.classList.add("estado-reservado");
-    } else if (valor === "entregado") {
-      select.classList.add("estado-entregado");
+  function normalizarTexto(texto) {
+    return String(texto || "").trim().toLowerCase();
+  }
+
+  function abrirModal() {
+    if (!modalEstado) return;
+    modalEstado.classList.remove("hidden");
+    modalEstado.setAttribute("aria-hidden", "false");
+  }
+
+  function cerrarModal() {
+    if (!modalEstado) return;
+    modalEstado.classList.add("hidden");
+    modalEstado.setAttribute("aria-hidden", "true");
+    orderIDSeleccionado = null;
+    filaSeleccionada = null;
+  }
+
+  function actualizarBadgeEstado(fila, nuevoEstado) {
+    if (!fila) return;
+
+    const badge = fila.querySelector(".badge-estado");
+    if (!badge) return;
+
+    badge.textContent = nuevoEstado;
+    badge.classList.remove("estado-reservado", "estado-entregado");
+
+    if (normalizarTexto(nuevoEstado) === "entregado") {
+      badge.classList.add("estado-entregado");
+    } else {
+      badge.classList.add("estado-reservado");
+    }
+
+    fila.dataset.orderStatus = nuevoEstado;
+
+    const botonEditar = fila.querySelector(".boton-editar-estado");
+    if (botonEditar) {
+      botonEditar.dataset.orderStatus = nuevoEstado;
     }
   }
 
   function filtrarTabla() {
-    const textoBusqueda = (inputBusqueda?.value || "").trim().toLowerCase();
-    const productoSeleccionado = (filtroProducto?.value || "").trim().toLowerCase();
-    const estadoSeleccionado = (filtroEstado?.value || "").trim().toLowerCase();
+    const textoBusqueda = normalizarTexto(inputBusqueda?.value);
+    const productoSeleccionado = normalizarTexto(filtroProducto?.value);
+    const estadoSeleccionado = normalizarTexto(filtroEstado?.value);
 
     const filas = document.querySelectorAll("#tablaPedidosBody tr");
 
     filas.forEach((fila) => {
       if (fila.querySelector(".sin-resultados")) return;
 
-      const idPedido = fila.querySelector(".id-pedido")?.textContent.trim().toLowerCase() || "";
-      const nombre = fila.querySelector(".nombre-cliente-pedido")?.textContent.trim().toLowerCase() || "";
-      const apellido = fila.querySelector(".apellido-cliente-pedido")?.textContent.trim().toLowerCase() || "";
-      const nombreProducto = fila.querySelector(".nombre-producto-pedido")?.textContent.trim().toLowerCase() || "";
-      const estadoActual = fila.querySelector(".select-estado-pedido")?.value.trim().toLowerCase() || "";
+      const idPedido = normalizarTexto(fila.querySelector(".id-pedido")?.textContent);
+      const nombre = normalizarTexto(fila.querySelector(".nombre-cliente-pedido")?.textContent);
+      const apellido = normalizarTexto(fila.querySelector(".apellido-cliente-pedido")?.textContent);
+      const nombreProducto = normalizarTexto(fila.querySelector(".nombre-producto-pedido")?.textContent);
+      const estadoActual = normalizarTexto(fila.dataset.orderStatus);
 
       const coincideBusqueda =
+        !textoBusqueda ||
         idPedido.includes(textoBusqueda) ||
         nombre.includes(textoBusqueda) ||
         apellido.includes(textoBusqueda);
@@ -57,70 +96,97 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({ orderStatus })
     });
 
-    return response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.error || "No se pudo actualizar el estado del pedido.");
+    }
+
+    return data;
   }
-
-  const selectsEstado = document.querySelectorAll(".select-estado-pedido");
-  selectsEstado.forEach((select) => {
-    aplicarColorEstado(select);
-
-    select.addEventListener("change", () => {
-      aplicarColorEstado(select);
-
-      const fila = select.closest("tr");
-      const botonGuardar = fila?.querySelector(".boton-guardar-estado");
-      if (botonGuardar) {
-        botonGuardar.classList.remove("hidden");
-      }
-
-      filtrarTabla();
-    });
-  });
 
   if (tablaBody) {
-    tablaBody.addEventListener("click", async (e) => {
+    tablaBody.addEventListener("click", (e) => {
       const botonEditar = e.target.closest(".boton-editar-estado");
-      const botonGuardar = e.target.closest(".boton-guardar-estado");
+      if (!botonEditar) return;
 
-      if (botonEditar) {
-        const fila = botonEditar.closest("tr");
-        const select = fila?.querySelector(".select-estado-pedido");
+      filaSeleccionada = botonEditar.closest("tr");
+      orderIDSeleccionado = botonEditar.dataset.orderId || filaSeleccionada?.dataset.orderId;
 
-        if (select) {
-          select.disabled = false;
-          select.focus();
-        }
+      const estadoActual =
+        botonEditar.dataset.orderStatus ||
+        filaSeleccionada?.dataset.orderStatus ||
+        "";
+
+      if (selectNuevoEstado) {
+        selectNuevoEstado.value = estadoActual;
       }
 
-      if (botonGuardar) {
-        const fila = botonGuardar.closest("tr");
-        const select = fila?.querySelector(".select-estado-pedido");
+      abrirModal();
+    });
+  }
 
-        if (!fila || !select) return;
+  if (btnCerrarModal) {
+    btnCerrarModal.addEventListener("click", cerrarModal);
+  }
 
-        const orderID = fila.dataset.orderId;
-        const orderStatus = select.value;
+  if (btnCancelarModal) {
+    btnCancelarModal.addEventListener("click", cerrarModal);
+  }
 
-        try {
-          const resultado = await actualizarEstadoPedido(orderID, orderStatus);
-
-          if (resultado.error) {
-            alert(resultado.error);
-            return;
-          }
-
-          select.disabled = true;
-          botonGuardar.classList.add("hidden");
-          fila.dataset.orderStatus = orderStatus;
-        } catch (error) {
-          console.error("Error al actualizar estado del pedido:", error);
-          alert("No se pudo actualizar el estado del pedido.");
-        }
+  if (modalEstado) {
+    modalEstado.addEventListener("click", (e) => {
+      if (e.target === modalEstado) {
+        cerrarModal();
       }
     });
   }
 
-  if (inputBusqueda) inputBusqueda.addEventListener("input", filtrarTabla);
-  if (filtroProducto) filtroProducto.addEventListener("change", filtrarTabla);
-  if (filtroEstado) filtroEstado.addEventListener("change", filtrarTabla);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modalEstado && !modalEstado.classList.contains("hidden")) {
+      cerrarModal();
+    }
+  });
+
+  if (btnConfirmarCambio) {
+    btnConfirmarCambio.addEventListener("click", async () => {
+      if (!orderIDSeleccionado || !selectNuevoEstado) return;
+
+      const nuevoEstado = selectNuevoEstado.value;
+      const textoOriginal = btnConfirmarCambio.textContent;
+
+      btnConfirmarCambio.disabled = true;
+      btnConfirmarCambio.textContent = "Guardando...";
+
+      try {
+        const resultado = await actualizarEstadoPedido(orderIDSeleccionado, nuevoEstado);
+
+        if (resultado?.error) {
+          throw new Error(resultado.error);
+        }
+
+        actualizarBadgeEstado(filaSeleccionada, nuevoEstado);
+        filtrarTabla();
+        cerrarModal();
+      } catch (error) {
+        console.error("Error al actualizar estado del pedido:", error);
+        alert(error.message || "No se pudo actualizar el estado del pedido.");
+      } finally {
+        btnConfirmarCambio.disabled = false;
+        btnConfirmarCambio.textContent = textoOriginal;
+      }
+    });
+  }
+
+  if (inputBusqueda) {
+    inputBusqueda.addEventListener("input", filtrarTabla);
+  }
+
+  if (filtroProducto) {
+    filtroProducto.addEventListener("change", filtrarTabla);
+  }
+
+  if (filtroEstado) {
+    filtroEstado.addEventListener("change", filtrarTabla);
+  }
 });

@@ -23,7 +23,10 @@ exports.renderPerfilComercialPage = (req, res) => {
       city,
       addressLine,
       contactPhone,
-      contactEmail
+      contactEmail,
+      instagram,
+      facebook,
+      tiktok
     FROM BusinessProfiles
     WHERE businessID = ?
     LIMIT 1
@@ -118,7 +121,10 @@ exports.updateBusinessProfile = (req, res) => {
     city,
     addressLine,
     contactPhone,
-    contactEmail
+    contactEmail,
+    instagram,
+    facebook,
+    tiktok
   } = req.body;
 
   const query = `
@@ -131,7 +137,10 @@ exports.updateBusinessProfile = (req, res) => {
       city = ?,
       addressLine = ?,
       contactPhone = ?,
-      contactEmail = ?
+      contactEmail = ?,
+      instagram = ?,
+      facebook = ?,
+      tiktok = ?
     WHERE businessID = ?
   `;
 
@@ -144,6 +153,9 @@ exports.updateBusinessProfile = (req, res) => {
     addressLine,
     contactPhone,
     contactEmail,
+    instagram || null,
+    facebook || null,
+    tiktok || null,
     businessID
   ];
 

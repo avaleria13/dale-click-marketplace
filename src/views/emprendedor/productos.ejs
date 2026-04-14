@@ -14,7 +14,7 @@
     <%- include('../partials/sidebar', { activePage: 'productos' }) %>
 
     <main class="contenido">
-      <%- include('../partials/topbar') %>
+      <%- include('../partials/topbar', { usuario }) %>
 
       <section
         class="seccion-productos"
@@ -27,7 +27,9 @@
               id="busquedaProducto"
               placeholder="Buscar producto..."
             />
-            <button type="button" class="boton-busqueda" aria-label="Buscar producto">🔍</button>
+            <button type="button" class="boton-busqueda" aria-label="Buscar producto">
+              <img src="/images/buscar.png" alt="Buscar" />
+            </button>
           </div>
 
           <select id="filtroCategoria" class="select-filtro">
@@ -352,6 +354,7 @@
   </div>
 
   <script src="/js/sidebar.js"></script>
+  <script src="/js/topbar.js"></script>
   <script src="/js/productos.js"></script>
 </body>
 </html>

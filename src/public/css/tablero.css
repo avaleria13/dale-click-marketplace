@@ -1,7 +1,7 @@
 .seccion-tablero {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
 }
 
 .encabezado-tablero {
@@ -14,14 +14,14 @@
 
 .encabezado-tablero h1 {
   color: #2f5fa7;
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   margin: 0 0 8px 0;
   font-weight: 800;
 }
 
 .encabezado-tablero p {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 900;
   color: #111;
 }
@@ -47,15 +47,15 @@
 .tarjetas-resumen {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 10px;
 }
 
 .tarjeta-resumen {
-  background-color: #ffffff;
+  background-color: #ea8168;
   border-radius: 18px;
-  padding: 22px;
+  padding: 12px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  min-height: 190px;
+  min-height: 110px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -70,62 +70,67 @@
   gap: 12px;
 }
 
-.tarjeta-resumen h2,
-.grafico-header h2 {
+.tarjeta-resumen h2 {
   margin: 0;
-  font-size: 1.35rem;
-  color: #111;
+  font-size: 1.3rem;
+  color: white;
 }
 
 .numero-principal {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 800;
-  margin: 14px 0 10px;
-  color: #111;
+  margin: 0px 0 0px;
+  color: white;
 }
 
 .tarjeta-resumen span {
-  color: #444;
+  color: white;
   font-size: 0.98rem;
 }
 
 .tarjetas-secundarias {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  gap: 10px;
 }
 
 .mini-tarjeta {
-  background: #ffffff;
+  background: #173f79;
   border: 1px solid #ddd7cb;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
-  padding: 16px 18px;
+  padding: 12px;
 }
 
 .mini-tarjeta h3 {
   margin: 0 0 10px;
   font-size: 1rem;
-  color: #222;
+  color: white;
 }
 
 .mini-tarjeta p {
   margin: 0;
   font-size: 2rem;
   font-weight: 800;
-  color: #111;
+  color: white;
 }
 
 .mini-tarjeta p span {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #444;
+  color: gainsboro;
 }
 
 .graficos-tablero {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  gap: 22px;
+  gap: 10px;
+}
+
+.grafico-header h2,
+.grafico-header h2{
+  color: #173f79;
+  font-size: 1.3rem;
 }
 
 .bloque-grafico {
@@ -133,7 +138,7 @@
   border: 1px solid #ddd7cb;
   border-radius: 16px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  padding: 20px;
+  padding: 10px;
 }
 
 .contenedor-canvas {
@@ -154,8 +159,8 @@
   height: 34px;
   padding: 0 12px;
   border-radius: 8px;
-  background-color: #173f79;
-  color: #ffffff;
+  background-color: white;
+  color: #173f79;
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
@@ -165,6 +170,13 @@
   min-width: 54px;
   height: 30px;
   font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.grafico-header .boton-exportar,
+.grafico-header .boton-exportar{
+  color: white;
+  background-color: #173f79;
 }
 
 @media (max-width: 1200px) {

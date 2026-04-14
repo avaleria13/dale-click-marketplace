@@ -14,190 +14,283 @@
     <%- include('../partials/sidebar', { activePage: 'perfil' }) %>
 
     <main class="contenido">
-      <!-- <%- include('../partials/topbar', { usuario }) %> -->
       <%- include('../partials/topbar') %>
 
       <section class="seccion-perfil-comercial">
-        <h1 class="titulo-seccion">Información del Negocio</h1>
+        <div class="encabezado-perfil-comercial">
+          <div>
+            <h1 class="titulo-seccion">Perfil Comercial</h1>
+            <p class="subtitulo-seccion">
+              Administra la información pública de tu negocio, redes sociales, horarios y suscripción.
+            </p>
+          </div>
 
-        <div class="tarjeta-negocio">
+          <div class="hero-logo-card">
+            <div class="hero-logo-ring">
+              <% if (businessProfile?.logoURL) { %>
+                <img
+                  id="logoPreviewHero"
+                  src="<%= businessProfile.logoURL %>"
+                  alt="Logo del negocio"
+                  onerror="this.src='/images/logo_daleclick.png'"
+                />
+              <% } else { %>
+                <img
+                  id="logoPreviewHero"
+                  src="/images/logo_daleclick.png"
+                  alt="Logo del negocio"
+                />
+              <% } %>
+            </div>
+            <div class="hero-logo-info">
+              <h2><%= businessProfile?.businessName || 'Tu negocio' %></h2>
+              <p><%= businessProfile?.city || 'Ciudad no registrada' %>, <%= businessProfile?.department || 'Departamento no registrado' %></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tarjeta-negocio tarjeta-principal">
+          <div class="tarjeta-header">
+            <div>
+              <p class="tarjeta-tag">Información general</p>
+              <h2>Datos del negocio</h2>
+            </div>
+            <span class="estado-edicion" id="estadoEdicion">Modo vista</span>
+          </div>
+
           <form id="formPerfilComercial" class="form-perfil-comercial">
-            <div class="columna-formulario">
-              <div class="fila-campo">
-                <label>Nombre del Negocio:</label>
+            <div class="grid-campos">
+              <div class="campo-card campo-card-full">
+                <div class="campo-card-header">
+                  <label for="businessName">Nombre del Negocio</label>
+                  <button type="button" class="boton-editar-campo" data-target="businessName" aria-label="Editar nombre del negocio">✎</button>
+                </div>
                 <input
                   type="text"
                   id="businessName"
                   name="businessName"
                   value="<%= businessProfile?.businessName || '' %>"
+                  placeholder="Nombre de tu negocio"
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="businessName">✎</button>
               </div>
 
-              <div class="fila-campo">
-                <label>Descripción:</label>
+              <div class="campo-card campo-card-full">
+                <div class="campo-card-header">
+                  <label for="description">Descripción</label>
+                  <button type="button" class="boton-editar-campo" data-target="description" aria-label="Editar descripción">✎</button>
+                </div>
                 <input
                   type="text"
                   id="description"
                   name="description"
                   value="<%= businessProfile?.description || '' %>"
+                  placeholder="Describe brevemente tu negocio"
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="description">✎</button>
               </div>
 
-              <div class="fila-campo">
-                <label>Dirección:</label>
+              <div class="campo-card campo-card-full">
+                <div class="campo-card-header">
+                  <label for="addressLine">Dirección</label>
+                  <button type="button" class="boton-editar-campo" data-target="addressLine" aria-label="Editar dirección">✎</button>
+                </div>
                 <input
                   type="text"
                   id="addressLine"
                   name="addressLine"
                   value="<%= businessProfile?.addressLine || '' %>"
+                  placeholder="Dirección del negocio"
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="addressLine">✎</button>
               </div>
 
-              <div class="fila-campo">
-                <label>Departamento:</label>
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="department">Departamento</label>
+                  <button type="button" class="boton-editar-campo" data-target="department" aria-label="Editar departamento">✎</button>
+                </div>
                 <input
                   type="text"
                   id="department"
                   name="department"
                   value="<%= businessProfile?.department || '' %>"
+                  placeholder="Departamento"
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="department">✎</button>
               </div>
 
-              <div class="fila-campo">
-                <label>Ciudad:</label>
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="city">Ciudad</label>
+                  <button type="button" class="boton-editar-campo" data-target="city" aria-label="Editar ciudad">✎</button>
+                </div>
                 <input
                   type="text"
                   id="city"
                   name="city"
                   value="<%= businessProfile?.city || '' %>"
+                  placeholder="Ciudad"
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="city">✎</button>
               </div>
-            </div>
 
-            <div class="columna-formulario">
-              <div class="fila-campo">
-                <label>Teléfono de Contacto:</label>
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="contactPhone">Teléfono de Contacto</label>
+                  <button type="button" class="boton-editar-campo" data-target="contactPhone" aria-label="Editar teléfono">✎</button>
+                </div>
                 <input
                   type="text"
                   id="contactPhone"
                   name="contactPhone"
                   value="<%= businessProfile?.contactPhone || '' %>"
+                  placeholder="Número de teléfono"
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="contactPhone">✎</button>
               </div>
 
-              <div class="fila-campo">
-                <label>Email de Contacto:</label>
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="contactEmail">Email de Contacto</label>
+                  <button type="button" class="boton-editar-campo" data-target="contactEmail" aria-label="Editar correo">✎</button>
+                </div>
                 <input
                   type="email"
                   id="contactEmail"
                   name="contactEmail"
                   value="<%= businessProfile?.contactEmail || '' %>"
+                  placeholder="correo@negocio.com"
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="contactEmail">✎</button>
               </div>
 
-              <div class="fila-campo">
-                <label>Logo URL:</label>
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="instagram">Instagram</label>
+                  <button type="button" class="boton-editar-campo" data-target="instagram" aria-label="Editar Instagram">✎</button>
+                </div>
+                <input
+                  type="text"
+                  id="instagram"
+                  name="instagram"
+                  value="<%= businessProfile?.instagram || '' %>"
+                  placeholder="@tunegocio"
+                  disabled
+                />
+              </div>
+
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="facebook">Facebook</label>
+                  <button type="button" class="boton-editar-campo" data-target="facebook" aria-label="Editar Facebook">✎</button>
+                </div>
+                <input
+                  type="text"
+                  id="facebook"
+                  name="facebook"
+                  value="<%= businessProfile?.facebook || '' %>"
+                  placeholder="Nombre o enlace"
+                  disabled
+                />
+              </div>
+
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="tiktok">TikTok</label>
+                  <button type="button" class="boton-editar-campo" data-target="tiktok" aria-label="Editar TikTok">✎</button>
+                </div>
+                <input
+                  type="text"
+                  id="tiktok"
+                  name="tiktok"
+                  value="<%= businessProfile?.tiktok || '' %>"
+                  placeholder="@tunegocio"
+                  disabled
+                />
+              </div>
+
+              <div class="campo-card">
+                <div class="campo-card-header">
+                  <label for="logoURL">Logo URL</label>
+                  <button type="button" class="boton-editar-campo" data-target="logoURL" aria-label="Editar URL del logo">✎</button>
+                </div>
                 <input
                   type="text"
                   id="logoURL"
                   name="logoURL"
                   value="<%= businessProfile?.logoURL || '' %>"
+                  placeholder="https://..."
                   disabled
                 />
-                <button type="button" class="boton-editar-campo" data-target="logoURL">✎</button>
-              </div>
-
-              <div class="preview-logo">
-                <% if (businessProfile?.logoURL) { %>
-                  <img
-                    id="logoPreview"
-                    src="<%= businessProfile.logoURL %>"
-                    alt="Logo del negocio"
-                    onerror="this.style.display='none'"
-                  />
-                <% } else { %>
-                  <img id="logoPreview" src="" alt="Logo del negocio" style="display: none;" />
-                <% } %>
               </div>
             </div>
 
             <div class="acciones-formulario">
-              <button type="submit" id="guardarCambios" class="boton-guardar" disabled>Guardar</button>
+              <button type="submit" id="guardarCambios" class="boton-guardar" disabled>Guardar cambios</button>
               <button type="button" id="cancelarCambios" class="boton-cancelar">Cancelar</button>
             </div>
           </form>
         </div>
 
         <div class="secciones-inferiores">
-          <section class="bloque-inferior bloque-horarios">
+          <section class="bloque-inferior bloque-horarios premium-card">
             <div class="cabecera-bloque">
-              <h2>Horarios</h2>
-              <button type="button" class="boton-secundario" id="btnAbrirModalHorarios">✎ Editar Horario</button>
+              <div>
+                <p class="tarjeta-tag">Disponibilidad</p>
+                <h2>Horarios</h2>
+              </div>
+              <button type="button" class="boton-secundario" id="btnAbrirModalHorarios">Editar horario</button>
             </div>
 
-            <div class="contenedor-horarios">
-              <table class="tabla-horarios">
-                <tbody>
-                  <% if (businessHours && businessHours.length > 0) { %>
-                    <% businessHours.forEach((hour) => { %>
-                      <tr>
-                        <td><%= hour.dayOfWeek %></td>
-                        <td>
-                          <% if (hour.isClosed) { %>
-                            Cerrado
-                          <% } else { %>
-                            <%= String(hour.openTime || '').slice(0, 5) %> - <%= String(hour.closeTime || '').slice(0, 5) %>
-                          <% } %>
-                        </td>
-                      </tr>
-                    <% }) %>
-                  <% } else { %>
-                    <tr>
-                      <td colspan="2" class="sin-resultados">No hay horarios registrados.</td>
-                    </tr>
-                  <% } %>
-                </tbody>
-              </table>
+            <div class="lista-horarios">
+              <% if (businessHours && businessHours.length > 0) { %>
+                <% businessHours.forEach((hour) => { %>
+                  <div class="item-horario">
+                    <span class="dia-horario-card"><%= hour.dayOfWeek %></span>
+                    <span class="hora-horario-card">
+                      <% if (hour.isClosed) { %>
+                        Cerrado
+                      <% } else { %>
+                        <%= String(hour.openTime || '').slice(0, 5) %> - <%= String(hour.closeTime || '').slice(0, 5) %>
+                      <% } %>
+                    </span>
+                  </div>
+                <% }) %>
+              <% } else { %>
+                <p class="sin-resultados">No hay horarios registrados.</p>
+              <% } %>
             </div>
           </section>
 
-          <section class="bloque-inferior bloque-suscripciones">
-            <h2>Suscripciones</h2>
+          <section class="bloque-inferior bloque-suscripciones premium-card">
+            <div class="cabecera-bloque">
+              <div>
+                <p class="tarjeta-tag">Membresía</p>
+                <h2>Suscripción</h2>
+              </div>
+            </div>
 
             <div class="contenido-suscripcion">
-              <p>
-                <strong>Plan Actual:</strong>
-                <span class="texto-plan"><%= subscription?.planName || 'Sin plan activo' %></span>
-              </p>
+              <div class="suscripcion-item">
+                <span>Plan Actual</span>
+                <strong><%= subscription?.planName || 'Sin plan activo' %></strong>
+              </div>
 
-              <p>
-                <strong>Fecha de Inicio:</strong>
-                <%= subscription?.startDate ? new Date(subscription.startDate).toISOString().split('T')[0] : 'N/D' %>
-              </p>
+              <div class="suscripcion-item">
+                <span>Fecha de Inicio</span>
+                <strong><%= subscription?.startDate ? new Date(subscription.startDate).toISOString().split('T')[0] : 'N/D' %></strong>
+              </div>
 
-              <p>
-                <strong>Fecha de Fin:</strong>
-                <%= subscription?.endDate ? new Date(subscription.endDate).toISOString().split('T')[0] : 'N/D' %>
-              </p>
+              <div class="suscripcion-item">
+                <span>Fecha de Fin</span>
+                <strong><%= subscription?.endDate ? new Date(subscription.endDate).toISOString().split('T')[0] : 'N/D' %></strong>
+              </div>
 
-              <p>
-                <strong>Anuncios Destacados:</strong>
-                <%= subscription?.featuredAds ?? 0 %>
-              </p>
+              <div class="suscripcion-item">
+                <span>Anuncios Destacados</span>
+                <strong><%= subscription?.featuredAds ?? 0 %></strong>
+              </div>
 
               <div class="barra-progreso">
                 <div class="progreso-actual"></div>
@@ -218,11 +311,8 @@
 
       <form id="formHorarios" class="form-modal">
         <% if (businessHours && businessHours.length > 0) { %>
-          <% businessHours.forEach((hour, index) => { %>
-            <div
-              class="fila-horario"
-              data-day="<%= hour.dayOfWeek %>"
-            >
+          <% businessHours.forEach((hour) => { %>
+            <div class="fila-horario" data-day="<%= hour.dayOfWeek %>">
               <div class="dia-horario"><%= hour.dayOfWeek %></div>
 
               <label class="check-cerrado">

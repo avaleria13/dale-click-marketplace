@@ -36,6 +36,28 @@ exports.renderConfiguracionPage = (req, res) => {
     LIMIT 1
   `;
 
+  const businessProfileQuery = `
+    SELECT
+      businessID,
+      userID,
+      businessName,
+      description,
+      logoURL,
+      department,
+      city,
+      addressLine,
+      referenceNote,
+      contactPhone,
+      contactEmail,
+      instagram,
+      facebook,
+      tiktok,
+      status
+    FROM BusinessProfiles
+    WHERE businessID = ? AND userID = ?
+    LIMIT 1
+  `;
+
   const planesQuery = `
     SELECT
       planID,
@@ -75,24 +97,34 @@ exports.renderConfiguracionPage = (req, res) => {
 
       const studentProfile = studentRows[0] || null;
 
-      db.query(planesQuery, (planesError, planesRows) => {
-        if (planesError) {
-          console.error('Error al obtener planes:', planesError);
+      db.query(businessProfileQuery, [businessID, userID], (businessError, businessRows) => {
+        if (businessError) {
+          console.error('Error al obtener perfil comercial:', businessError);
           return res.status(500).send('Error al cargar configuración');
         }
 
-        db.query(historialQuery, [businessID], (historialError, historialRows) => {
-          if (historialError) {
-            console.error('Error al obtener historial:', historialError);
+        const businessProfile = businessRows[0] || null;
+
+        db.query(planesQuery, (planesError, planesRows) => {
+          if (planesError) {
+            console.error('Error al obtener planes:', planesError);
             return res.status(500).send('Error al cargar configuración');
           }
 
-          return res.render('emprendedor/configuracion', {
-            activePage: 'configuracion',
-            usuario,
-            studentProfile,
-            planes: planesRows || [],
-            historialSuscripciones: historialRows || []
+          db.query(historialQuery, [businessID], (historialError, historialRows) => {
+            if (historialError) {
+              console.error('Error al obtener historial:', historialError);
+              return res.status(500).send('Error al cargar configuración');
+            }
+
+            return res.render('emprendedor/configuracion', {
+              activePage: 'configuracion',
+              usuario,
+              studentProfile,
+              businessProfile,
+              planes: planesRows || [],
+              historialSuscripciones: historialRows || []
+            });
           });
         });
       });
@@ -102,16 +134,20 @@ exports.renderConfiguracionPage = (req, res) => {
 
 exports.updateUsuario = (req, res) => {
   const userID = USER_ID_TEMPORAL;
+  const businessID = BUSINESS_ID_TEMPORAL;
 
   const {
     firstName,
     lastName,
     email,
     phone,
-    password
+    password,
+    instagram,
+    facebook,
+    tiktok
   } = req.body;
 
-  const query = `
+  const updateUserQuery = `
     UPDATE Users
     SET
       firstName = ?,
@@ -122,20 +158,46 @@ exports.updateUsuario = (req, res) => {
     WHERE userID = ? AND roleID = 2
   `;
 
+  const updateBusinessProfileQuery = `
+    UPDATE BusinessProfiles
+    SET
+      instagram = ?,
+      facebook = ?,
+      tiktok = ?
+    WHERE businessID = ? AND userID = ?
+  `;
+
   db.query(
-    query,
+    updateUserQuery,
     [firstName, lastName, email, phone, password, userID],
-    (error, result) => {
-      if (error) {
-        console.error('Error al actualizar usuario:', error);
+    (userError, userResult) => {
+      if (userError) {
+        console.error('Error al actualizar usuario:', userError);
         return res.status(500).json({ error: 'Error al actualizar usuario' });
       }
 
-      if (result.affectedRows === 0) {
+      if (userResult.affectedRows === 0) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
 
-      return res.json({ message: 'Usuario actualizado correctamente' });
+      db.query(
+        updateBusinessProfileQuery,
+        [
+          instagram || null,
+          facebook || null,
+          tiktok || null,
+          businessID,
+          userID
+        ],
+        (businessError) => {
+          if (businessError) {
+            console.error('Error al actualizar redes del negocio:', businessError);
+            return res.status(500).json({ error: 'Error al actualizar redes sociales' });
+          }
+
+          return res.json({ message: 'Usuario actualizado correctamente' });
+        }
+      );
     }
   );
 };

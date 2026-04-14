@@ -17,7 +17,8 @@
       <%- include('../partials/topbar', { usuario }) %>
 
       <section class="seccion-configuracion">
-        <div class="panel-superior-configuracion">
+      <div class="panel-superior-configuracion">
+        <div class="columna-principal-configuracion">
           <form id="formConfiguracionUsuario" class="bloque-configuracion bloque-emprendedor">
             <h2>Información del Emprendedor</h2>
 
@@ -76,6 +77,54 @@
             </div>
 
             <div class="fila-campo-config">
+            <span class="icono-campo">📸</span>
+            <div class="campo-contenido">
+              <label>Instagram</label>
+              <input 
+                type="text" 
+                id="instagram" 
+                name="instagram" 
+                value="<%= businessProfile?.instagram || '' %>" 
+                placeholder="@tuusuario"
+                disabled 
+              />
+            </div>
+            <button type="button" class="boton-editar-config" data-target="instagram">✎</button>
+          </div>
+
+          <div class="fila-campo-config">
+            <span class="icono-campo">📘</span>
+            <div class="campo-contenido">
+              <label>Facebook</label>
+              <input 
+                type="text" 
+                id="facebook" 
+                name="facebook" 
+                value="<%= businessProfile?.facebook || '' %>" 
+                placeholder="facebook.com/tu-pagina"
+                disabled 
+              />
+            </div>
+            <button type="button" class="boton-editar-config" data-target="facebook">✎</button>
+          </div>
+
+          <div class="fila-campo-config">
+            <span class="icono-campo">🎵</span>
+            <div class="campo-contenido">
+              <label>TikTok</label>
+              <input 
+                type="text" 
+                id="tiktok" 
+                name="tiktok" 
+                value="<%= businessProfile?.tiktok || '' %>" 
+                placeholder="@tiktok"
+                disabled 
+              />
+            </div>
+            <button type="button" class="boton-editar-config" data-target="tiktok">✎</button>
+          </div>
+
+            <div class="fila-campo-config">
               <span class="icono-campo">🔑</span>
               <div class="campo-contenido">
                 <label>Password</label>
@@ -126,22 +175,33 @@
             </div>
           </div>
 
-          <div class="bloque-foto-perfil">
-            <div class="marco-foto">
-              <img
-                src="<%= usuario?.profileImageURL || '/images/perfil-usuario.png' %>"
-                alt="Foto de perfil"
-                id="previewFotoPerfil"
-                onerror="this.src='/images/perfil-usuario.png'"
-              />
-            </div>
-
-            <label for="inputFotoPerfil" class="boton-cambiar-foto">
-              Cambiar Foto<br />de Perfil
-            </label>
-            <input type="file" id="inputFotoPerfil" accept="image/*" hidden />
+          <div class="acciones-configuracion acciones-configuracion-superior">
+            <button type="button" id="guardarConfiguracion" class="boton-guardar-config" disabled>Guardar cambios</button>
+            <button type="button" id="cancelarConfiguracion" class="boton-cancelar-config">Cancelar</button>
           </div>
         </div>
+
+        <div class="bloque-foto-perfil premium-card">
+          <div class="foto-header">
+            <p class="tag-config">Perfil</p>
+            <h2>Foto del usuario</h2>
+          </div>
+
+          <div class="marco-foto">
+            <img
+              src="<%= usuario?.profileImageURL || '/images/perfil-usuario.png' %>"
+              alt="Foto de perfil"
+              id="previewFotoPerfil"
+              onerror="this.src='/images/perfil-usuario.png'"
+            />
+          </div>
+
+          <label for="inputFotoPerfil" class="boton-cambiar-foto">
+            Cambiar foto de perfil
+          </label>
+          <input type="file" id="inputFotoPerfil" accept="image/*" hidden />
+        </div>
+      </div>
 
         <div class="panel-inferior-configuracion">
           <section class="bloque-suscripcion-planes">
@@ -207,11 +267,6 @@
               </table>
             </div>
           </section>
-        </div>
-
-        <div class="acciones-configuracion">
-          <button type="button" id="guardarConfiguracion" class="boton-guardar-config" disabled>Guardar cambios</button>
-          <button type="button" id="cancelarConfiguracion" class="boton-cancelar-config">Cancelar</button>
         </div>
       </section>
     </main>

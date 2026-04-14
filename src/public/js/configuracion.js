@@ -19,11 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function activarGuardar() {
+    if (!botonGuardar) return;
     botonGuardar.disabled = false;
     botonGuardar.classList.add("activo");
   }
 
   function desactivarGuardar() {
+    if (!botonGuardar) return;
     botonGuardar.disabled = true;
     botonGuardar.classList.remove("activo");
   }
@@ -84,8 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
       input.disabled = false;
       input.classList.add("editando");
       input.focus();
-      input.selectionStart = input.value.length;
-      input.selectionEnd = input.value.length;
+
+      const largo = input.value.length;
+      input.setSelectionRange(largo, largo);
 
       activarGuardar();
     });
@@ -94,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (botonCancelar) {
     botonCancelar.addEventListener("click", () => {
       inputs.forEach((input) => {
-        input.value = valoresIniciales[input.id];
+        input.value = valoresIniciales[input.id] ?? "";
         input.disabled = true;
         input.classList.remove("editando");
       });
@@ -110,7 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
         lastName: document.getElementById("lastName")?.value.trim() || "",
         email: document.getElementById("email")?.value.trim() || "",
         phone: document.getElementById("phone")?.value.trim() || "",
-        password: document.getElementById("password")?.value.trim() || ""
+        password: document.getElementById("password")?.value.trim() || "",
+        instagram: document.getElementById("instagram")?.value.trim() || "",
+        facebook: document.getElementById("facebook")?.value.trim() || "",
+        tiktok: document.getElementById("tiktok")?.value.trim() || ""
       };
 
       try {
@@ -143,7 +149,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const lector = new FileReader();
       lector.onload = (e) => {
-        previewFotoPerfil.src = e.target.result;
+        if (previewFotoPerfil) {
+          previewFotoPerfil.src = e.target.result;
+        }
       };
       lector.readAsDataURL(archivo);
 
@@ -155,7 +163,9 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        previewFotoPerfil.src = resultado.profileImageURL;
+        if (previewFotoPerfil) {
+          previewFotoPerfil.src = resultado.profileImageURL;
+        }
 
         const avatarTopbar = document.querySelector(".avatar-usuario");
         if (avatarTopbar) {
@@ -172,9 +182,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".boton-solicitar").forEach((boton) => {
     boton.addEventListener("click", () => {
-      solicitudPlanID.value = boton.dataset.planId || "";
-      solicitudPlanNombre.value = boton.dataset.planName || "";
-      solicitudMensaje.value = `Hola, deseo solicitar el plan ${boton.dataset.planName}.`;
+      if (solicitudPlanID) {
+        solicitudPlanID.value = boton.dataset.planId || "";
+      }
+
+      if (solicitudPlanNombre) {
+        solicitudPlanNombre.value = boton.dataset.planName || "";
+      }
+
+      if (solicitudMensaje) {
+        solicitudMensaje.value = `Hola, deseo solicitar el plan ${boton.dataset.planName}.`;
+      }
+
       abrirModal(modalSolicitarPlan);
     });
   });
@@ -200,9 +219,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const data = {
-        planID: solicitudPlanID.value,
-        planName: solicitudPlanNombre.value,
-        message: solicitudMensaje.value.trim()
+        planID: solicitudPlanID?.value || "",
+        planName: solicitudPlanNombre?.value || "",
+        message: solicitudMensaje?.value.trim() || ""
       };
 
       if (!data.planID || !data.planName || !data.message) {
