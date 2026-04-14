@@ -1,17 +1,18 @@
 .seccion-clientes {
-  padding: 20px 26px;
-  min-height: 100%;
+  padding: 0px 0px; 
+  width: 100%;
+  max-width: 100%;
 }
 
 .barra-filtros-clientes {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 18px;
-  padding: 18px;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 10px;
   border-radius: 18px;
   background: #173a6a;
-  box-shadow: 0 10px 30px rgba(23, 58, 106, 0.08);
+  width: 100%;
 }
 
 .input-filtro-cliente,
@@ -39,22 +40,22 @@
 .contenedor-tabla-clientes {
   background: #ffffff;
   border-radius: 20px;
-  padding: 10px;
+  padding: 0px;
   box-shadow: 0 12px 40px rgba(23, 58, 106, 0.1);
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .tabla-clientes {
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;
-  min-width: 980px;
+  min-width: 100%; 
 }
 
 .tabla-clientes thead th {
   text-align: left;
-  padding: 14px 16px;
+  padding: 10px 10px;
   font-size: 0.85rem;
   font-weight: 800;
   color: #6b7a99;

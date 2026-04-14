@@ -29,7 +29,7 @@
     </div>
 
     <img
-      src="<%= (typeof usuario !== 'undefined' && usuario && usuario.profileImageURL) ? usuario.profileImageURL : '/images/perfil-usuario.png' %>"
+      src="<%= (usuario && usuario.profileImageURL && String(usuario.profileImageURL).trim() !== '') ? usuario.profileImageURL : '/images/perfil-usuario.png' %>"
       alt="Perfil de usuario"
       class="avatar-usuario"
       onerror="this.src='/images/perfil-usuario.png'"

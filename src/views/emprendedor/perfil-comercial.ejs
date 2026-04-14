@@ -14,7 +14,7 @@
     <%- include('../partials/sidebar', { activePage: 'perfil' }) %>
 
     <main class="contenido">
-      <%- include('../partials/topbar') %>
+      <%- include('../partials/topbar', { usuario }) %>
 
       <section class="seccion-perfil-comercial">
         <div class="encabezado-perfil-comercial">
@@ -350,6 +350,7 @@
   </div>
 
   <script src="/js/sidebar.js"></script>
+  <script src="/js/topbar.js"></script>
   <script src="/js/perfil-comercial.js"></script>
 </body>
 </html>

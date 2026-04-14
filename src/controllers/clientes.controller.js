@@ -1,8 +1,47 @@
 const db = require('../config/db');
 const transporter = require('../config/mailer');
 
-const USER_ID_TEMPORAL = 2;
-const BUSINESS_ID_TEMPORAL = 1;
+function getUsuarioSesion(req) {
+  return req.session?.usuario || null;
+}
+
+function getUsuarioActual(userID, callback) {
+  const query = `
+    SELECT
+      userID,
+      username,
+      firstName,
+      lastName,
+      email,
+      roleID,
+      profileImageURL
+    FROM Users
+    WHERE userID = ?
+    LIMIT 1
+  `;
+
+  db.query(query, [userID], (error, rows) => {
+    if (error) return callback(error);
+    callback(null, rows[0] || null);
+  });
+}
+
+function getBusinessByUser(userID, callback) {
+  const query = `
+    SELECT
+      businessID,
+      businessName,
+      contactEmail
+    FROM BusinessProfiles
+    WHERE userID = ?
+    LIMIT 1
+  `;
+
+  db.query(query, [userID], (error, rows) => {
+    if (error) return callback(error);
+    callback(null, rows[0] || null);
+  });
+}
 
 function formatDateToISO(dateValue) {
   if (!dateValue) return null;
@@ -53,81 +92,7 @@ function transformarClientes(rows) {
   });
 }
 
-exports.renderClientesPage = (req, res) => {
-  const businessID = BUSINESS_ID_TEMPORAL;
-
-  const usuarioQuery = `
-    SELECT userID, firstName, profileImageURL
-    FROM Users
-    WHERE userID = ? AND roleID = 2
-    LIMIT 1
-  `;
-
-  const query = `
-    SELECT
-      u.userID,
-      u.firstName,
-      u.lastName,
-      u.email,
-      u.phone,
-      COUNT(DISTINCT o.orderID) AS totalPedidos,
-      COALESCE(SUM(od.quantity * od.unitPrice), 0) AS gastoTotal,
-      MAX(o.orderDate) AS ultimaCompra
-    FROM Orders o
-    INNER JOIN Users u ON u.userID = o.userID
-    INNER JOIN OrderDetails od ON od.orderID = o.orderID
-    WHERE o.businessID = ?
-      AND u.roleID = 1
-    GROUP BY
-      u.userID,
-      u.firstName,
-      u.lastName,
-      u.email,
-      u.phone
-    ORDER BY MAX(o.orderDate) DESC, u.firstName ASC, u.lastName ASC
-  `;
-
-  db.query(usuarioQuery, [USER_ID_TEMPORAL], (errorUsuario, usuarioRows) => {
-    if (errorUsuario) {
-      console.error('Error al obtener usuario:', errorUsuario);
-      return res.status(500).send('Error al cargar clientes');
-    }
-
-    const usuario = usuarioRows[0] || null;
-
-    db.query(query, [businessID], (error, rows) => {
-      if (error) {
-        console.error('Error al obtener clientes:', error);
-        return res.status(500).send('Error al cargar clientes');
-      }
-
-      const clientes = transformarClientes(rows);
-
-      return res.render('emprendedor/clientes', {
-        activePage: 'clientes',
-        usuario,
-        clientes,
-        segmentos: ['Activo', 'Nuevo', 'At-Risk'],
-        rangosFecha: [
-          { value: '30', label: 'Últimos 30 días' },
-          { value: '60', label: 'Últimos 60 días' },
-          { value: '90', label: 'Últimos 90 días' }
-        ],
-        ordenes: [
-          { value: 'gasto-desc', label: 'Gasto total (mayor a menor)' },
-          { value: 'gasto-asc', label: 'Gasto total (menor a mayor)' },
-          { value: 'pedidos-desc', label: 'Pedidos (mayor a menor)' },
-          { value: 'fecha-desc', label: 'Última compra (más reciente)' },
-          { value: 'fecha-asc', label: 'Última compra (más antigua)' }
-        ]
-      });
-    });
-  });
-};
-
-exports.getClientes = (req, res) => {
-  const businessID = BUSINESS_ID_TEMPORAL;
-
+function getClientesByBusiness(businessID, callback) {
   const query = `
     SELECT
       u.userID,
@@ -153,12 +118,108 @@ exports.getClientes = (req, res) => {
   `;
 
   db.query(query, [businessID], (error, rows) => {
-    if (error) {
-      console.error('Error al obtener clientes:', error);
+    if (error) return callback(error);
+    callback(null, transformarClientes(rows));
+  });
+}
+
+function getContextoCliente(req, callback) {
+  const usuarioSesion = getUsuarioSesion(req);
+
+  if (!usuarioSesion?.userID) {
+    return callback(new Error('No hay sesión activa.'));
+  }
+
+  getUsuarioActual(usuarioSesion.userID, (usuarioError, usuario) => {
+    if (usuarioError) return callback(usuarioError);
+
+    if (!usuario) {
+      return callback(new Error('Usuario no encontrado.'));
+    }
+
+    getBusinessByUser(usuario.userID, (businessError, business) => {
+      if (businessError) return callback(businessError);
+
+      if (!business) {
+        return callback(new Error('El usuario no tiene negocio asociado.'));
+      }
+
+      const usuarioLimpio = {
+        ...usuario,
+        profileImageURL:
+          usuario.profileImageURL && String(usuario.profileImageURL).trim() !== ''
+            ? usuario.profileImageURL
+            : null
+      };
+
+      callback(null, {
+        usuario: usuarioLimpio,
+        business
+      });
+    });
+  });
+}
+
+exports.renderClientesPage = (req, res) => {
+  getContextoCliente(req, (contextoError, contexto) => {
+    if (contextoError) {
+      console.error('Error al cargar clientes:', contextoError);
+
+      if (contextoError.message === 'No hay sesión activa.') {
+        return res.redirect('/login');
+      }
+
+      return res.status(500).send('Error al cargar clientes');
+    }
+
+    getClientesByBusiness(contexto.business.businessID, (error, clientes) => {
+      if (error) {
+        console.error('Error al obtener clientes:', error);
+        return res.status(500).send('Error al cargar clientes');
+      }
+
+      return res.render('emprendedor/clientes', {
+        activePage: 'clientes',
+        usuario: contexto.usuario,
+        clientes,
+        segmentos: ['Activo', 'Nuevo', 'At-Risk'],
+        rangosFecha: [
+          { value: '30', label: 'Últimos 30 días' },
+          { value: '60', label: 'Últimos 60 días' },
+          { value: '90', label: 'Últimos 90 días' }
+        ],
+        ordenes: [
+          { value: 'gasto-desc', label: 'Gasto total (mayor a menor)' },
+          { value: 'gasto-asc', label: 'Gasto total (menor a mayor)' },
+          { value: 'pedidos-desc', label: 'Pedidos (mayor a menor)' },
+          { value: 'fecha-desc', label: 'Última compra (más reciente)' },
+          { value: 'fecha-asc', label: 'Última compra (más antigua)' }
+        ]
+      });
+    });
+  });
+};
+
+exports.getClientes = (req, res) => {
+  getContextoCliente(req, (contextoError, contexto) => {
+    if (contextoError) {
+      console.error('Error al obtener contexto de clientes:', contextoError);
+
+      if (contextoError.message === 'No hay sesión activa.') {
+        return res.status(401).json({ error: 'Sesión no válida' });
+      }
+
       return res.status(500).json({ error: 'Error al obtener clientes' });
     }
 
-    return res.json(transformarClientes(rows));
+    getClientesByBusiness(contexto.business.businessID, (error, clientes) => {
+      if (error) {
+        console.error('Error al obtener clientes:', error);
+        return res.status(500).json({ error: 'Error al obtener clientes' });
+      }
+
+      return res.json(clientes);
+    });
   });
 };
 
@@ -177,20 +238,22 @@ exports.contactarCliente = async (req, res) => {
     return res.status(400).json({ error: 'Faltan datos para enviar el correo' });
   }
 
-  const businessQuery = `
-    SELECT businessName, contactEmail
-    FROM BusinessProfiles
-    WHERE businessID = ?
-    LIMIT 1
-  `;
+  const usuarioSesion = getUsuarioSesion(req);
 
-  db.query(businessQuery, [BUSINESS_ID_TEMPORAL], async (err, rows) => {
-    if (err) {
-      console.error(err);
+  if (!usuarioSesion?.userID) {
+    return res.status(401).json({ error: 'Sesión no válida' });
+  }
+
+  getBusinessByUser(usuarioSesion.userID, async (businessError, negocio) => {
+    if (businessError) {
+      console.error(businessError);
       return res.status(500).json({ error: 'Error al obtener datos del negocio' });
     }
 
-    const negocio = rows[0];
+    if (!negocio) {
+      return res.status(404).json({ error: 'Negocio no encontrado' });
+    }
+
     const sellerEmail = negocio.contactEmail;
     const businessName = negocio.businessName;
 

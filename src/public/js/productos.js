@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const seccionProductos = document.querySelector(".seccion-productos");
+
   const inputBusqueda = document.getElementById("busquedaProducto");
   const filtroCategoria = document.getElementById("filtroCategoria");
   const filtroEstado = document.getElementById("filtroEstado");
@@ -16,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const formImagen = document.getElementById("formImagenProducto");
 
   const confirmarEliminarBtn = document.getElementById("confirmarEliminarProducto");
+
+  const crearBusinessID = document.getElementById("crearBusinessID");
 
   const editarProductID = document.getElementById("editarProductID");
   const editarCategoryID = document.getElementById("editarCategoryID");
@@ -45,17 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.classList.add("hidden");
   }
 
-  function cerrarTodosLosModales() {
-    [modalCrear, modalEditar, modalEliminar, modalImagen].forEach(cerrarModal);
-  }
-
   function limpiarFormularioCrear() {
     if (formCrear) formCrear.reset();
-  }
 
-  function limpiarFormularioEditar() {
-    if (formEditar) formEditar.reset();
-    if (editarProductID) editarProductID.value = "";
+    const businessID = seccionProductos?.dataset.businessId || "";
+    if (crearBusinessID) crearBusinessID.value = businessID;
   }
 
   function limpiarFormularioImagen() {
@@ -75,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const nombre = fila.querySelector(".nombre-producto")?.textContent.toLowerCase() || "";
       const descripcion = fila.querySelector(".info-producto p")?.textContent.toLowerCase() || "";
-      const categoria = fila.querySelector(".select-categoria-fila option:checked")?.textContent.toLowerCase().trim() || "";
+      const categoria = fila.dataset.categoryName?.toLowerCase().trim() || "";
       const estado = fila.querySelector(".estado")?.textContent.toLowerCase().trim() || "";
 
       const coincideTexto = nombre.includes(texto) || descripcion.includes(texto);
@@ -91,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       productID: fila.dataset.productId,
       businessID: fila.dataset.businessId,
       categoryID: fila.dataset.categoryId,
+      categoryName: fila.dataset.categoryName,
       productName: fila.dataset.productName,
       description: fila.dataset.description,
       price: fila.dataset.price,
@@ -208,7 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
       data.price = parseFloat(data.price);
       data.stock = parseInt(data.stock, 10);
       data.categoryID = parseInt(data.categoryID, 10);
-      data.businessID = parseInt(data.businessID, 10);
+
+      if (data.businessID) {
+        data.businessID = parseInt(data.businessID, 10);
+      }
 
       try {
         const resultado = await crearProducto(data);

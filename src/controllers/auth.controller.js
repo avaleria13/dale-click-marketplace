@@ -10,17 +10,17 @@ exports.showLogin = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const { email, password, role } = req.body || {};
+  const { username, password, role } = req.body || {};
 
   console.log('BODY:', req.body);
 
-  if (!email || !password || !role) {
-    return res.status(400).send('Debes completar email, contraseña y seleccionar un rol.');
+  if (!username || !password || !role) {
+    return res.status(400).send('Debes completar usuario, contraseña y seleccionar un rol.');
   }
 
   db.query(
-    'SELECT * FROM Users WHERE email = ?',
-    [email],
+    'SELECT * FROM Users WHERE username = ?',
+    [username],
     (error, rows) => {
       if (error) {
         console.error('Error en query:', error);

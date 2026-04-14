@@ -1,102 +1,117 @@
 .seccion-configuracion {
-  padding: 12px 0 28px;
+  padding: 10px 0 22px;
   background:
-    radial-gradient(circle at top right, rgba(98, 154, 255, 0.16), transparent 24%),
-    radial-gradient(circle at bottom left, rgba(33, 89, 191, 0.10), transparent 24%),
+    radial-gradient(circle at top right, rgba(98, 154, 255, 0.14), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(33, 89, 191, 0.08), transparent 24%),
     linear-gradient(180deg, #eef5ff 0%, #e8f0ff 100%);
   border-radius: 28px 28px 0 0;
 }
 
 .panel-superior-configuracion {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) 280px;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.9fr);
+  gap: 18px;
   align-items: start;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
-.columna-principal-configuracion {
+.columna-principal-configuracion,
+.columna-secundaria-configuracion {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 18px;
+  min-width: 0;
 }
 
 .bloque-configuracion,
 .bloque-suscripcion-planes,
 .bloque-historial-suscripciones,
 .premium-card {
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 26px;
-  box-shadow: 0 16px 46px rgba(31, 72, 140, 0.12);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 24px;
+  box-shadow: 0 14px 36px rgba(31, 72, 140, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .bloque-configuracion,
 .bloque-suscripcion-planes,
 .bloque-historial-suscripciones {
-  padding: 8px;
+  padding: 5px 0px 5px 10px;
+}
+
+.cabecera-bloque-config {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .bloque-configuracion h2,
 .bloque-suscripcion-planes h2,
 .bloque-historial-suscripciones h2,
 .foto-header h2 {
-  margin: 0 0 2px;
-  font-size: 1.3rem;
+  margin: 0;
+  font-size: 1.22rem;
   font-weight: 800;
   color: #ec8169;
 }
 
-.tag-config {
-  margin: 0 0 6px;
-  font-size: 0.8rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #6a89c2;
+.grid-configuracion-emprendedor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 14px;
 }
 
 .fila-campo-config {
   display: grid;
-  grid-template-columns: 40px 1fr 42px;
-  gap: 12px;
+  grid-template-columns: 38px 1fr 40px;
+  gap: 10px;
   align-items: end;
-  margin-bottom: 0px;
-  padding: 8px;
+}
+
+.fila-campo-config.simple {
+  grid-template-columns: 38px 1fr;
+}
+
+.fila-campo-ancha {
+  grid-column: 1 / -1;
 }
 
 .icono-campo {
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #35527f;
   background: linear-gradient(180deg, #f8fbff, #edf4ff);
   border: 1px solid #d9e6fb;
+  font-size: 1rem;
 }
 
 .campo-contenido {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
+  min-width: 0;
 }
 
 .campo-contenido label {
-  font-size: 0.94rem;
+  font-size: 0.9rem;
   font-weight: 800;
   color: #1d3557;
 }
 
 .campo-contenido input {
-  min-height: 46px;
+  min-height: 42px;
   border: 1px solid #dbe5f6;
   background: #f6f9ff;
-  border-radius: 16px;
-  padding: 0 14px;
-  font-size: 0.97rem;
+  border-radius: 14px;
+  padding: 0 12px;
+  font-size: 0.95rem;
   color: #22324a;
   outline: none;
   transition: all 0.2s ease;
@@ -114,10 +129,10 @@
 }
 
 .boton-editar-config {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border: 1px solid #d9e4f6;
-  border-radius: 14px;
+  border-radius: 12px;
   background: #ffffff;
   cursor: pointer;
   font-size: 1rem;
@@ -143,16 +158,16 @@
 
 .bloque-status label {
   display: block;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   font-weight: 800;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: #22324a;
 }
 
 .status-lista {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .estado-chip {
@@ -160,10 +175,10 @@
   align-items: center;
   justify-content: center;
   width: fit-content;
-  min-width: 110px;
-  padding: 8px 16px;
+  min-width: 118px;
+  padding: 8px 14px;
   border-radius: 999px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 800;
   color: #fff;
 }
@@ -177,11 +192,11 @@
 }
 
 .bloque-foto-perfil {
-  padding: 22px;
+  padding: 5px 0px 5px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 5px;
 }
 
 .foto-header {
@@ -190,10 +205,10 @@
 }
 
 .marco-foto {
-  width: 170px;
-  height: 170px;
-  border-radius: 24px;
-  padding: 8px;
+  width: 148px;
+  height: 148px;
+  border-radius: 22px;
+  padding: 5px;
   background: linear-gradient(145deg, #ffffff, #dce9ff);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
 }
@@ -202,13 +217,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 18px;
+  border-radius: 16px;
   background: #fff;
 }
 
 .boton-cambiar-foto {
   width: 100%;
-  min-height: 46px;
+  min-height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -216,10 +231,10 @@
   background: linear-gradient(135deg, #2f67c8, #174895);
   color: #fff;
   font-weight: 800;
-  border-radius: 14px;
-  padding: 0 16px;
+  border-radius: 12px;
+  padding: 0 14px;
   cursor: pointer;
-  box-shadow: 0 12px 28px rgba(32, 78, 157, 0.24);
+  box-shadow: 0 10px 24px rgba(32, 78, 157, 0.22);
   transition: all 0.2s ease;
 }
 
@@ -229,14 +244,14 @@
 
 .panel-inferior-configuracion {
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 22px;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 }
 
 .lista-planes {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .fila-plan {
@@ -244,8 +259,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 16px;
-  border-radius: 18px;
+  padding: 12px 14px;
+  border-radius: 16px;
   background: linear-gradient(180deg, #ffffff, #f6f9ff);
   border: 1px solid #dce7fa;
 }
@@ -253,28 +268,28 @@
 .detalle-plan {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .nombre-plan {
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 800;
   color: #24354e;
 }
 
 .detalle-plan small {
   color: #6780a7;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
 }
 
 .boton-solicitar {
-  min-width: 126px;
-  min-height: 40px;
+  min-width: 118px;
+  min-height: 38px;
   border: none;
   border-radius: 12px;
   background: linear-gradient(135deg, #2f67c8, #174895);
   color: #ffffff;
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -295,10 +310,10 @@
 
 .tabla-suscripciones th,
 .tabla-suscripciones td {
-  padding: 14px 12px;
+  padding: 12px 10px;
   text-align: left;
   border-bottom: 1px solid #e8eef8;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
 }
 
 .tabla-suscripciones th {
@@ -306,17 +321,17 @@
   color: #6780a7;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
 }
 
 .estado-tabla {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 100px;
-  padding: 6px 14px;
+  min-width: 92px;
+  padding: 6px 12px;
   border-radius: 999px;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 800;
   color: #fff;
 }
@@ -335,8 +350,8 @@
 
 .acciones-configuracion {
   display: flex;
-  gap: 12px;
-  margin-top: 2px;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .acciones-configuracion-superior {
@@ -345,10 +360,10 @@
 
 .boton-guardar-config,
 .boton-cancelar-config {
-  min-height: 46px;
-  padding: 0 20px;
-  border-radius: 14px;
-  font-size: 0.96rem;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 0.94rem;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -391,7 +406,7 @@
 
 .sin-resultados {
   text-align: center;
-  padding: 24px;
+  padding: 20px;
   font-weight: 700;
   color: #5f7394;
 }
@@ -522,13 +537,25 @@
     grid-template-columns: 1fr;
   }
 
-  .bloque-foto-perfil {
-    align-items: flex-start;
+  .columna-secundaria-configuracion {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+}
+
+@media (max-width: 860px) {
+  .grid-configuracion-emprendedor {
+    grid-template-columns: 1fr;
   }
 
-  .marco-foto {
-    width: 150px;
-    height: 150px;
+  .columna-secundaria-configuracion {
+    grid-template-columns: 1fr;
+  }
+
+  .fila-campo-ancha {
+    grid-column: auto;
   }
 }
 
@@ -536,6 +563,10 @@
   .fila-campo-config {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+
+  .fila-campo-config.simple {
+    grid-template-columns: 1fr;
   }
 
   .icono-campo {
@@ -555,21 +586,4 @@
   .boton-cambiar-foto {
     width: 100%;
   }
-}
-
-.icono-campo {
-  font-size: 1.1rem;
-}
-
-/* Diferenciar redes sociales */
-.fila-campo-config:nth-last-child(3) .icono-campo {
-  background: linear-gradient(135deg, #fdf2ff, #f3e8ff);
-}
-
-.fila-campo-config:nth-last-child(2) .icono-campo {
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-}
-
-.fila-campo-config:nth-last-child(1) .icono-campo {
-  background: linear-gradient(135deg, #ecfeff, #cffafe);
 }

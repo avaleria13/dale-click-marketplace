@@ -14,7 +14,7 @@
     <%- include('../partials/sidebar', { activePage: 'pedidos' }) %>
 
     <main class="contenido">
-      <%- include('../partials/topbar') %>
+      <%- include('../partials/topbar', { usuario }) %>
 
       <section class="seccion-pedidos">
         <div class="barra-filtros-pedidos">
@@ -55,8 +55,6 @@
                 <th>Precio Unitario</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Email</th>
-                <th>Teléfono</th>
                 <th>Estado</th>
                 <th>Acción</th>
               </tr>
@@ -81,8 +79,6 @@
                     <td class="precio-pedido">C$ <%= Number(pedido.unitPrice).toFixed(2) %></td>
                     <td class="nombre-cliente-pedido"><%= pedido.firstName %></td>
                     <td class="apellido-cliente-pedido"><%= pedido.lastName %></td>
-                    <td class="email-pedido"><%= pedido.email %></td>
-                    <td class="telefono-pedido"><%= pedido.phone %></td>
                     <td class="celda-estado">
                       <span
                         class="badge-estado <%= String(pedido.orderStatus).toLowerCase() === 'entregado' ? 'estado-entregado' : 'estado-reservado' %>"
@@ -99,14 +95,14 @@
                         title="Editar estado"
                         aria-label="Editar estado"
                       >
-                        ✎
+                      <img src="/images/editar.png" alt="Editar" class="icono-editar"/>
                       </button>
                     </td>
                   </tr>
                 <% }) %>
               <% } else { %>
                 <tr>
-                  <td colspan="11" class="sin-resultados">
+                  <td colspan="9" class="sin-resultados">
                     No hay pedidos registrados.
                   </td>
                 </tr>

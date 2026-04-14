@@ -14,7 +14,7 @@
     <%- include('../partials/sidebar', { activePage: 'clientes' }) %>
 
     <main class="contenido">
-      <%- include('../partials/topbar') %>
+      <%- include('../partials/topbar', { usuario }) %>
 
       <section class="seccion-clientes">
         <div class="barra-filtros-clientes">
@@ -156,6 +156,7 @@
   </div>
 
   <script src="/js/sidebar.js"></script>
+  <script src="/js/topbar.js"></script>
   <script src="/js/clientes.js"></script>
 </body>
 </html>

@@ -19,6 +19,7 @@
       <section
         class="seccion-productos"
         data-estados='<%- JSON.stringify(estados || []) %>'
+        data-business-id="<%= businessID || '' %>"
       >
         <div class="barra-filtros">
           <div class="campo-busqueda">
@@ -80,6 +81,7 @@
                     data-product-id="<%= producto.productID %>"
                     data-business-id="<%= producto.businessID %>"
                     data-category-id="<%= producto.categoryID %>"
+                    data-category-name="<%= producto.categoryName || '' %>"
                     data-product-name="<%= producto.productName %>"
                     data-description="<%= producto.description || '' %>"
                     data-price="<%= producto.price %>"
@@ -104,25 +106,7 @@
                     </td>
 
                     <td>
-                      <div class="categoria-editable">
-                        <select class="select-categoria-fila" disabled>
-                          <% (categorias || []).forEach((categoria) => { %>
-                            <option
-                              value="<%= categoria.categoryID %>"
-                              <%= Number(producto.categoryID) === Number(categoria.categoryID) ? 'selected' : '' %>
-                            >
-                              <%= categoria.categoryName %>
-                            </option>
-                          <% }) %>
-                        </select>
-                        <button
-                          type="button"
-                          class="boton-editar-categoria"
-                          aria-label="Editar categoría"
-                        >
-                          ✎
-                        </button>
-                      </div>
+                      <span class="categoria-texto"><%= producto.categoryName || 'Sin categoría' %></span>
                     </td>
 
                     <td class="precio-producto">C$<%= Number(producto.price).toFixed(2) %></td>
@@ -141,7 +125,7 @@
                           class="accion editar btn-editar-producto"
                           title="Editar"
                         >
-                          ✎
+                        <img src="/images/editar.png" alt="Editar" class="icono-editar" />
                         </button>
 
                         <button
@@ -149,7 +133,7 @@
                           class="accion eliminar btn-eliminar-producto"
                           title="Eliminar"
                         >
-                          🗑
+                        <img src="/images/borrar.png" alt="Eliminar" class="icono-eliminar" />
                         </button>
 
                         <button
@@ -157,7 +141,7 @@
                           class="accion imagen btn-imagen-producto"
                           title="Cambiar imagen"
                         >
-                          🖼
+                        <img src="/images/imagen.png" alt="Cambiar imagen" class="icono-imagen" />
                         </button>
                       </div>
                     </td>
@@ -189,7 +173,12 @@
       </div>
 
       <form id="formCrearProducto" class="form-modal">
-        <input type="hidden" name="businessID" id="crearBusinessID" value="1" />
+        <input
+          type="hidden"
+          name="businessID"
+          id="crearBusinessID"
+          value="<%= businessID || '' %>"
+        />
 
         <div class="grupo-campo">
           <label for="crearCategoryID">Categoría</label>

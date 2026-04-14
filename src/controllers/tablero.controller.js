@@ -1,8 +1,5 @@
 const db = require('../config/db');
 
-const USER_ID_TEMPORAL = 2;
-const BUSINESS_ID_TEMPORAL = 1;
-
 function getDateFilterClause(periodo) {
   switch (periodo) {
     case '7':
@@ -12,7 +9,7 @@ function getDateFilterClause(periodo) {
     case '90':
       return 'AND o.orderDate >= DATE_SUB(NOW(), INTERVAL 90 DAY)';
     default:
-      return '';
+      return 'AND o.orderDate >= DATE_SUB(NOW(), INTERVAL 30 DAY)';
   }
 }
 
@@ -29,189 +26,247 @@ function mapPeriodoLabel(periodo) {
   }
 }
 
-function buildDashboardData(periodo, callback) {
-  const businessID = BUSINESS_ID_TEMPORAL;
-  const filtro = getDateFilterClause(periodo || '30');
+function getUsuarioSesion(req) {
+  return req.session?.usuario || null;
+}
 
+function getUsuarioActual(userID, callback) {
   const usuarioQuery = `
-    SELECT userID, firstName, profileImageURL
+    SELECT 
+      userID,
+      username,
+      firstName,
+      lastName,
+      email,
+      roleID,
+      profileImageURL
     FROM Users
-    WHERE userID = ? AND roleID = 2
+    WHERE userID = ?
     LIMIT 1
   `;
 
-  const productosQuery = `
-    SELECT COUNT(*) AS totalProductos
-    FROM Products
-    WHERE businessID = ?
+  db.query(usuarioQuery, [userID], (error, rows) => {
+    if (error) return callback(error);
+    callback(null, rows[0] || null);
+  });
+}
+
+function getBusinessIDByUser(userID, callback) {
+  const negocioQuery = `
+    SELECT businessID
+    FROM BusinessProfiles
+    WHERE userID = ?
+    LIMIT 1
   `;
 
-  const pedidosEntregadosQuery = `
-    SELECT COUNT(*) AS pedidosEntregados
-    FROM Orders o
-    WHERE o.businessID = ?
-      AND o.orderStatus = 'Entregado'
-      ${filtro}
-  `;
+  db.query(negocioQuery, [userID], (error, rows) => {
+    if (error) return callback(error);
+    callback(null, rows[0]?.businessID || null);
+  });
+}
 
-  const ventasNetasQuery = `
-    SELECT COALESCE(SUM(od.quantity * od.unitPrice), 0) AS ventasNetas
-    FROM Orders o
-    INNER JOIN OrderDetails od ON od.orderID = o.orderID
-    WHERE o.businessID = ?
-      AND o.orderStatus = 'Entregado'
-      ${filtro}
-  `;
+function buildDashboardData(req, periodo, callback) {
+  const usuarioSesion = getUsuarioSesion(req);
 
-  const totalClientesQuery = `
-    SELECT COUNT(DISTINCT o.userID) AS totalClientes
-    FROM Orders o
-    INNER JOIN Users u ON u.userID = o.userID
-    WHERE o.businessID = ?
-      AND u.roleID = 1
-      ${filtro}
-  `;
+  if (!usuarioSesion?.userID) {
+    return callback(new Error('No hay sesión activa.'));
+  }
 
-  const nuevosClientesQuery = `
-    SELECT COUNT(*) AS nuevosClientes
-    FROM (
-      SELECT o.userID, MIN(o.orderDate) AS primeraCompra
-      FROM Orders o
-      INNER JOIN Users u ON u.userID = o.userID
-      WHERE o.businessID = ?
-        AND u.roleID = 1
-      GROUP BY o.userID
-      HAVING primeraCompra >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    ) AS nuevos
-  `;
+  const userID = usuarioSesion.userID;
+  const filtro = getDateFilterClause(periodo || '30');
 
-  const ticketPromedioQuery = `
-    SELECT COALESCE(AVG(t.totalPedido), 0) AS ticketPromedio
-    FROM (
-      SELECT o.orderID, SUM(od.quantity * od.unitPrice) AS totalPedido
-      FROM Orders o
-      INNER JOIN OrderDetails od ON od.orderID = o.orderID
-      WHERE o.businessID = ?
-        AND o.orderStatus = 'Entregado'
-        ${filtro}
-      GROUP BY o.orderID
-    ) AS t
-  `;
-
-  const clientesRecurrentesQuery = `
-    SELECT COUNT(*) AS clientesRecurrentes
-    FROM (
-      SELECT o.userID, COUNT(DISTINCT o.orderID) AS totalPedidos
-      FROM Orders o
-      INNER JOIN Users u ON u.userID = o.userID
-      WHERE o.businessID = ?
-        AND u.roleID = 1
-        ${filtro}
-      GROUP BY o.userID
-      HAVING COUNT(DISTINCT o.orderID) >= 2
-    ) AS recurrentes
-  `;
-
-  const ventasPorMesQuery = `
-    SELECT
-      DATE_FORMAT(o.orderDate, '%Y-%m') AS mes,
-      COALESCE(SUM(od.quantity * od.unitPrice), 0) AS totalVentas
-    FROM Orders o
-    INNER JOIN OrderDetails od ON od.orderID = o.orderID
-    WHERE o.businessID = ?
-      AND o.orderStatus = 'Entregado'
-      AND o.orderDate >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
-    GROUP BY DATE_FORMAT(o.orderDate, '%Y-%m')
-    ORDER BY mes ASC
-  `;
-
-  const pedidosPorEstadoQuery = `
-    SELECT
-      o.orderStatus,
-      COUNT(*) AS total
-    FROM Orders o
-    WHERE o.businessID = ?
-      ${filtro}
-    GROUP BY o.orderStatus
-    ORDER BY total DESC
-  `;
-
-  const clientesResumenQuery = `
-    SELECT
-      u.userID,
-      u.firstName,
-      u.lastName,
-      COUNT(DISTINCT o.orderID) AS totalPedidos,
-      COALESCE(SUM(od.quantity * od.unitPrice), 0) AS gastoTotal,
-      MAX(o.orderDate) AS ultimaCompra
-    FROM Orders o
-    INNER JOIN Users u ON u.userID = o.userID
-    INNER JOIN OrderDetails od ON od.orderID = o.orderID
-    WHERE o.businessID = ?
-      AND u.roleID = 1
-      ${filtro}
-    GROUP BY u.userID, u.firstName, u.lastName
-    ORDER BY gastoTotal DESC
-  `;
-
-  db.query(usuarioQuery, [USER_ID_TEMPORAL], (usuarioError, usuarioRows) => {
+  getUsuarioActual(userID, (usuarioError, usuarioActual) => {
     if (usuarioError) return callback(usuarioError);
-    const usuario = usuarioRows[0] || null;
 
-    db.query(productosQuery, [businessID], (productosError, productosRows) => {
-      if (productosError) return callback(productosError);
+    if (!usuarioActual) {
+      return callback(new Error('Usuario no encontrado.'));
+    }
 
-      db.query(pedidosEntregadosQuery, [businessID], (pedidosError, pedidosRows) => {
-        if (pedidosError) return callback(pedidosError);
+    getBusinessIDByUser(userID, (businessError, businessID) => {
+      if (businessError) return callback(businessError);
 
-        db.query(ventasNetasQuery, [businessID], (ventasError, ventasRows) => {
-          if (ventasError) return callback(ventasError);
+      if (!businessID) {
+        return callback(new Error('El usuario no tiene un negocio asociado.'));
+      }
 
-          db.query(totalClientesQuery, [businessID], (clientesError, clientesRows) => {
-            if (clientesError) return callback(clientesError);
+      const productosQuery = `
+        SELECT COUNT(*) AS totalProductos
+        FROM Products
+        WHERE businessID = ?
+      `;
 
-            db.query(nuevosClientesQuery, [businessID], (nuevosError, nuevosRows) => {
-              if (nuevosError) return callback(nuevosError);
+      const pedidosEntregadosQuery = `
+        SELECT COUNT(*) AS pedidosEntregados
+        FROM Orders o
+        WHERE o.businessID = ?
+          AND o.orderStatus = 'Entregado'
+          ${filtro}
+      `;
 
-              db.query(ticketPromedioQuery, [businessID], (ticketError, ticketRows) => {
-                if (ticketError) return callback(ticketError);
+      const ventasNetasQuery = `
+        SELECT COALESCE(SUM(od.quantity * od.unitPrice), 0) AS ventasNetas
+        FROM Orders o
+        INNER JOIN OrderDetails od ON od.orderID = o.orderID
+        WHERE o.businessID = ?
+          AND o.orderStatus = 'Entregado'
+          ${filtro}
+      `;
 
-                db.query(clientesRecurrentesQuery, [businessID], (recurrentesError, recurrentesRows) => {
-                  if (recurrentesError) return callback(recurrentesError);
+      const totalClientesQuery = `
+        SELECT COUNT(DISTINCT o.userID) AS totalClientes
+        FROM Orders o
+        INNER JOIN Users u ON u.userID = o.userID
+        WHERE o.businessID = ?
+          AND u.roleID = 1
+          ${filtro}
+      `;
 
-                  db.query(ventasPorMesQuery, [businessID], (ventasMesError, ventasMesRows) => {
-                    if (ventasMesError) return callback(ventasMesError);
+      const nuevosClientesQuery = `
+        SELECT COUNT(*) AS nuevosClientes
+        FROM (
+          SELECT o.userID, MIN(o.orderDate) AS primeraCompra
+          FROM Orders o
+          INNER JOIN Users u ON u.userID = o.userID
+          WHERE o.businessID = ?
+            AND u.roleID = 1
+          GROUP BY o.userID
+          HAVING primeraCompra >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        ) AS nuevos
+      `;
 
-                    db.query(pedidosPorEstadoQuery, [businessID], (estadoError, estadoRows) => {
-                      if (estadoError) return callback(estadoError);
+      const ticketPromedioQuery = `
+        SELECT COALESCE(AVG(t.totalPedido), 0) AS ticketPromedio
+        FROM (
+          SELECT o.orderID, SUM(od.quantity * od.unitPrice) AS totalPedido
+          FROM Orders o
+          INNER JOIN OrderDetails od ON od.orderID = o.orderID
+          WHERE o.businessID = ?
+            AND o.orderStatus = 'Entregado'
+            ${filtro}
+          GROUP BY o.orderID
+        ) AS t
+      `;
 
-                      db.query(clientesResumenQuery, [businessID], (clientesResumenError, clientesResumenRows) => {
-                        if (clientesResumenError) return callback(clientesResumenError);
+      const clientesRecurrentesQuery = `
+        SELECT COUNT(*) AS clientesRecurrentes
+        FROM (
+          SELECT o.userID, COUNT(DISTINCT o.orderID) AS totalPedidos
+          FROM Orders o
+          INNER JOIN Users u ON u.userID = o.userID
+          WHERE o.businessID = ?
+            AND u.roleID = 1
+            ${filtro}
+          GROUP BY o.userID
+          HAVING COUNT(DISTINCT o.orderID) >= 2
+        ) AS recurrentes
+      `;
 
-                        const totalClientes = Number(clientesRows[0]?.totalClientes || 0);
-                        const clientesRecurrentes = Number(recurrentesRows[0]?.clientesRecurrentes || 0);
+      const ventasPorMesQuery = `
+        SELECT
+          DATE_FORMAT(o.orderDate, '%Y-%m') AS mes,
+          COALESCE(SUM(od.quantity * od.unitPrice), 0) AS totalVentas
+        FROM Orders o
+        INNER JOIN OrderDetails od ON od.orderID = o.orderID
+        WHERE o.businessID = ?
+          AND o.orderStatus = 'Entregado'
+          AND o.orderDate >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+        GROUP BY DATE_FORMAT(o.orderDate, '%Y-%m')
+        ORDER BY mes ASC
+      `;
 
-                        callback(null, {
-                          usuario,
-                          periodo: periodo || '30',
-                          periodoLabel: mapPeriodoLabel(periodo || '30'),
-                          resumen: {
-                            totalProductos: Number(productosRows[0]?.totalProductos || 0),
-                            pedidosEntregados: Number(pedidosRows[0]?.pedidosEntregados || 0),
-                            ventasNetas: Number(ventasRows[0]?.ventasNetas || 0),
-                            totalClientes,
-                            nuevosClientes: Number(nuevosRows[0]?.nuevosClientes || 0),
-                            ticketPromedio: Number(ticketRows[0]?.ticketPromedio || 0),
-                            clientesRecurrentes,
-                            porcentajeRecurrentes: totalClientes > 0
-                              ? Math.round((clientesRecurrentes / totalClientes) * 100)
-                              : 0
-                          },
-                          charts: {
-                            ventasPorMes: ventasMesRows || [],
-                            pedidosPorEstado: estadoRows || []
-                          },
-                          clientesResumen: clientesResumenRows || []
+      const pedidosPorEstadoQuery = `
+        SELECT
+          o.orderStatus,
+          COUNT(*) AS total
+        FROM Orders o
+        WHERE o.businessID = ?
+          ${filtro}
+        GROUP BY o.orderStatus
+        ORDER BY total DESC
+      `;
+
+      const clientesResumenQuery = `
+        SELECT
+          u.userID,
+          u.firstName,
+          u.lastName,
+          COUNT(DISTINCT o.orderID) AS totalPedidos,
+          COALESCE(SUM(od.quantity * od.unitPrice), 0) AS gastoTotal,
+          MAX(o.orderDate) AS ultimaCompra
+        FROM Orders o
+        INNER JOIN Users u ON u.userID = o.userID
+        INNER JOIN OrderDetails od ON od.orderID = o.orderID
+        WHERE o.businessID = ?
+          AND u.roleID = 1
+          ${filtro}
+        GROUP BY u.userID, u.firstName, u.lastName
+        ORDER BY gastoTotal DESC
+      `;
+
+      db.query(productosQuery, [businessID], (productosError, productosRows) => {
+        if (productosError) return callback(productosError);
+
+        db.query(pedidosEntregadosQuery, [businessID], (pedidosError, pedidosRows) => {
+          if (pedidosError) return callback(pedidosError);
+
+          db.query(ventasNetasQuery, [businessID], (ventasError, ventasRows) => {
+            if (ventasError) return callback(ventasError);
+
+            db.query(totalClientesQuery, [businessID], (clientesError, clientesRows) => {
+              if (clientesError) return callback(clientesError);
+
+              db.query(nuevosClientesQuery, [businessID], (nuevosError, nuevosRows) => {
+                if (nuevosError) return callback(nuevosError);
+
+                db.query(ticketPromedioQuery, [businessID], (ticketError, ticketRows) => {
+                  if (ticketError) return callback(ticketError);
+
+                  db.query(clientesRecurrentesQuery, [businessID], (recurrentesError, recurrentesRows) => {
+                    if (recurrentesError) return callback(recurrentesError);
+
+                    db.query(ventasPorMesQuery, [businessID], (ventasMesError, ventasMesRows) => {
+                      if (ventasMesError) return callback(ventasMesError);
+
+                      db.query(pedidosPorEstadoQuery, [businessID], (estadoError, estadoRows) => {
+                        if (estadoError) return callback(estadoError);
+
+                        db.query(clientesResumenQuery, [businessID], (clientesResumenError, clientesResumenRows) => {
+                          if (clientesResumenError) return callback(clientesResumenError);
+
+                          const totalClientes = Number(clientesRows[0]?.totalClientes || 0);
+                          const clientesRecurrentes = Number(recurrentesRows[0]?.clientesRecurrentes || 0);
+
+                          callback(null, {
+                            usuario: {
+                              ...usuarioActual,
+                              profileImageURL:
+                                usuarioActual.profileImageURL &&
+                                String(usuarioActual.profileImageURL).trim() !== ''
+                                  ? usuarioActual.profileImageURL
+                                  : null
+                            },
+                            businessID,
+                            periodo: periodo || '30',
+                            periodoLabel: mapPeriodoLabel(periodo || '30'),
+                            resumen: {
+                              totalProductos: Number(productosRows[0]?.totalProductos || 0),
+                              pedidosEntregados: Number(pedidosRows[0]?.pedidosEntregados || 0),
+                              ventasNetas: Number(ventasRows[0]?.ventasNetas || 0),
+                              totalClientes,
+                              nuevosClientes: Number(nuevosRows[0]?.nuevosClientes || 0),
+                              ticketPromedio: Number(ticketRows[0]?.ticketPromedio || 0),
+                              clientesRecurrentes,
+                              porcentajeRecurrentes:
+                                totalClientes > 0
+                                  ? Math.round((clientesRecurrentes / totalClientes) * 100)
+                                  : 0
+                            },
+                            charts: {
+                              ventasPorMes: ventasMesRows || [],
+                              pedidosPorEstado: estadoRows || []
+                            },
+                            clientesResumen: clientesResumenRows || []
+                          });
                         });
                       });
                     });
@@ -243,9 +298,14 @@ function toCSV(rows, headers) {
 exports.renderTableroPage = (req, res) => {
   const periodo = req.query.periodo || '30';
 
-  buildDashboardData(periodo, (error, data) => {
+  buildDashboardData(req, periodo, (error, data) => {
     if (error) {
       console.error('Error al cargar tablero:', error);
+
+      if (error.message === 'No hay sesión activa.') {
+        return res.redirect('/login');
+      }
+
       return res.status(500).send('Error al cargar tablero');
     }
 
@@ -263,9 +323,14 @@ exports.renderTableroPage = (req, res) => {
 exports.getDashboardData = (req, res) => {
   const periodo = req.query.periodo || '30';
 
-  buildDashboardData(periodo, (error, data) => {
+  buildDashboardData(req, periodo, (error, data) => {
     if (error) {
       console.error('Error al obtener datos del tablero:', error);
+
+      if (error.message === 'No hay sesión activa.') {
+        return res.status(401).json({ error: 'Sesión no válida' });
+      }
+
       return res.status(500).json({ error: 'Error al obtener datos del tablero' });
     }
 
@@ -276,7 +341,7 @@ exports.getDashboardData = (req, res) => {
 exports.exportResumenCSV = (req, res) => {
   const periodo = req.query.periodo || '30';
 
-  buildDashboardData(periodo, (error, data) => {
+  buildDashboardData(req, periodo, (error, data) => {
     if (error) {
       console.error('Error al exportar resumen CSV:', error);
       return res.status(500).send('Error al exportar resumen');
@@ -315,7 +380,7 @@ exports.exportResumenCSV = (req, res) => {
 exports.exportVentasCSV = (req, res) => {
   const periodo = req.query.periodo || '30';
 
-  buildDashboardData(periodo, (error, data) => {
+  buildDashboardData(req, periodo, (error, data) => {
     if (error) {
       console.error('Error al exportar ventas CSV:', error);
       return res.status(500).send('Error al exportar ventas');
@@ -340,7 +405,7 @@ exports.exportVentasCSV = (req, res) => {
 exports.exportClientesCSV = (req, res) => {
   const periodo = req.query.periodo || '30';
 
-  buildDashboardData(periodo, (error, data) => {
+  buildDashboardData(req, periodo, (error, data) => {
     if (error) {
       console.error('Error al exportar clientes CSV:', error);
       return res.status(500).send('Error al exportar clientes');
